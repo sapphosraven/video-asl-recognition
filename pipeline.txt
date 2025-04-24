@@ -1,0 +1,66 @@
+# ASL Recognition Project Pipeline
+
+## Current Progress
+- Project initialization
+- Repository setup
+- CUDA testing implementation
+
+## Planned Implementation
+
+### 1. Pose Estimation Setup
+- Select and implement pose estimation library (MediaPipe or OpenPose)
+- MediaPipe offers 21 keypoints per hand plus body pose (lightweight)
+- OpenPose provides more detailed tracking but requires more computing power
+- Focus on extracting hand keypoints and upper body landmarks
+
+### 2. Keypoint Extraction Process
+- Extract per-frame keypoints from videos
+  - Both hands (21 keypoints each)
+  - Arms (shoulders, elbows, wrists)
+  - Optional: facial landmarks and torso
+- Save coordinates as sequential data (time series)
+- Process format: frame_1 → [x1, y1, ..., xN, yN], frame_2 → ...
+
+### 3. Keypoint Preprocessing
+- Normalize coordinates to [0,1] range by dividing by image dimensions
+- Center around body to eliminate camera position variations
+- Handle missing detections through interpolation or frame removal
+- Apply smoothing via moving average to reduce jitter
+
+### 4. Dataset Organization
+- Structure data as sequences of frame-level keypoint vectors
+- Pair with ground truth labels for supervised learning
+- Format: sample_1: [frame_1_vector, frame_2_vector, ..., frame_T_vector], label='book'
+
+### 5. Model Input Preparation
+- Standardize sequence lengths through padding or interpolation
+- Create input tensors with shape [batch_size, time_steps, keypoints_per_frame]
+- Split data into training, validation, and test sets
+
+### 6. Model Development
+- Implement sequence models appropriate for temporal data:
+  - RNNs (LSTM or GRU)
+  - Temporal Convolutional Networks (TCNs)
+  - Transformer architecture (if resources permit)
+- Train to predict sign classes from keypoint sequences
+
+### 7. Multimodal Fusion (Optional Enhancement)
+- Train a CNN on raw video frames
+- Combine CNN visual features with pose keypoint model
+- Fusion methods: averaging predictions or concatenating embeddings
+
+### 8. Real-Time Recognition Pipeline
+- Implement webcam frame capture
+- Process frames through pose estimator in real-time
+- Use sliding window approach (1-2 seconds of recent frames)
+- Perform continuous prediction on the temporal window
+
+### 9. Evaluation & Refinement
+- Benchmark model performance with standard metrics
+- Optimize for both accuracy and inference speed
+- Refine model based on common failure cases
+
+### 10. User Interface & Deployment
+- Develop simple interface for demonstration
+- Package solution for ease of use
+- Document usage and limitations

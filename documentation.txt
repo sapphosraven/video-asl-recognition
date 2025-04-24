@@ -1,0 +1,41 @@
+# Video ASL Recognition Project Documentation
+
+## Project Setup (Current Date)
+
+### Repository Initialization
+- Created GitHub repository for version control and collaboration
+- Established initial project structure
+- Added README.md with project overview and basic instructions
+
+### Environment Configuration
+- Created testcuda.py to verify GPU availability for deep learning tasks
+- Implemented CUDA detection and system information reporting
+- Set up requirements.txt with necessary dependencies for reproducibility
+
+### Project Planning
+- Developed comprehensive pipeline.txt outlining the project workflow
+- Identified key components for ASL recognition system:
+  - Pose estimation (MediaPipe/OpenPose)
+  - Keypoint extraction and preprocessing
+  - Sequential data handling
+  - Model architecture planning (RNN/LSTM)
+  - Real-time inference considerations
+
+### Technical Decisions
+- Selected PyTorch as the primary deep learning framework
+- Decided to focus on hand and upper body keypoints for ASL recognition
+- Planned for potential multi-modal approach combining visual and pose features
+- Prioritized performance optimization for real-time recognition capability
+
+## Next Steps
+- Data collection and preprocessing
+- Implementation of pose estimation pipeline
+- Feature extraction from keypoint data
+- Model development and training
+- Evaluation and performance optimization
+
+---
+NOTE: This documentation will be periodically updated throughout the project development to maintain a comprehensive record for the final report.
+
+## Update History
+- Initial documentation created (Current Date)
