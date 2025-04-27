@@ -1,9 +1,9 @@
 # Ignore data directories with large files
 pose_estimation/data/raw/
 pose_estimation/data/processed/
-pose_estimation/data/WLASL100/videos/
-pose_estimation/data/WLASL300/videos/
-pose_estimation/data/WLASL1000/videos/
+pose_estimation/data/WLASL100/
+pose_estimation/data/WLASL300/
+pose_estimation/data/WLASL1000/
 
 # Ignore the cloned repository
 pose_estimation/wlasl_repo/
