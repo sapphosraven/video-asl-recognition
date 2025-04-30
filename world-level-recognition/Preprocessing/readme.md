@@ -1,3 +1,5 @@
+assuming source foler ="videos"
+
 first convert all to mp4
 
 then delete all non mp4
