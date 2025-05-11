@@ -99152,5 +99152,105 @@
       "ACT"
     ],
     "target": "No one acts like that."
+  },
+  {
+    "input": ["YOU", "MARRIED"],
+    "target": "Are you married?"
+  },
+  {
+    "input": ["YOU", "DEAF"],
+    "target": "Are you deaf?"
+  },
+  {
+    "input": ["YOUR", "TEACHER", "NAME"],
+    "target": "What is your teacher's name?"
+  },
+  {
+    "input": ["YOUR", "MOTHER", "NAME"],
+    "target": "What is your mother's name?"
+  },
+  {
+    "input": ["YOUR", "FATHER", "NAME"],
+    "target": "What is your father's name?"
+  },
+  {
+    "input": ["YOU", "NAME"],
+    "target": "What is your name?"
+  },
+  {
+    "input": ["YOU", "UNDERSTAND", "ME"],
+    "target": "Do you understand me?"
+  },
+  {
+    "input": ["YOU", "NEED", "HELP"],
+    "target": "Do you need help?"
+  },
+  {
+    "input": ["YOUR", "FAMILY", "LARGE"],
+    "target": "Is your family large?"
+  },
+  {
+    "input": ["HOW", "MANY", "BROTHERS", "YOU"],
+    "target": "How many brothers do you have?"
+  },
+  {
+    "input": ["YOUR", "HOUSE", "WHERE"],
+    "target": "Where is your house?"
+  },
+  {
+    "input": ["YOU", "LIVE", "WHERE"],
+    "target": "Where do you live?"
+  },
+  {
+    "input": ["YOUR", "BIRTHDAY", "WHEN"],
+    "target": "When is your birthday?"
+  },
+  {
+    "input": ["YOUR", "FAVORITE", "FOOD", "WHAT"],
+    "target": "What is your favorite food?"
+  },
+  {
+    "input": ["YOU", "HAVE", "CHILDREN"],
+    "target": "Do you have children?"
+  },
+  {
+    "input": ["YOUR", "BROTHER", "NAME"],
+    "target": "What is your brother's name?"
+  },
+  {
+    "input": ["YOU", "WANT", "EAT"],
+    "target": "Do you want to eat?"
+  },
+  {
+    "input": ["YOU", "WORK", "WHERE"],
+    "target": "Where do you work?"
+  },
+  {
+    "input": ["YOU", "GO", "SCHOOL", "WHERE"],
+    "target": "Where do you go to school?"
+  },
+  {
+    "input": ["YOUR", "FAVORITE", "COLOR", "WHAT"],
+    "target": "What is your favorite color?"
+  },
+  {
+    "input": ["YOUR", "NAME", "SIGN", "WHAT"],
+    "target": "What is your name sign?"
+  },
+  {
+    "input": ["YOU", "WANT", "MOVIE", "SEE"],
+    "target": "Do you want to see a movie?"
+  },
+  {
+    "input": ["YOUR", "TEACHER", "DEAF"],
+    "target": "Is your teacher deaf?"
+  },
+  {
+    "input": ["YOU", "FEEL", "HOW"],
+    "target": "How are you feeling?"
+  },
+  {
+    "input": ["YOU", "SIBLINGS", "HOW", "MANY"],
+    "target": "How many siblings do you have?"
   }
 ]
