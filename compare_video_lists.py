@@ -3,8 +3,8 @@ Script to compare two lists of video files and identify differences.
 This helps team members identify which videos they are missing.
 """
 
-import argparse
 import os
+import json
 
 def read_file_lines(filename):
     """Read lines from a file and return as a set."""
@@ -52,18 +52,26 @@ def compare_files(file1, file2, output_file):
     
     return len(only_in_file1), len(only_in_file2)
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Compare two lists of video files')
-    parser.add_argument('--file1', type=str, required=True, 
-                      help='First text file with video filenames')
-    parser.add_argument('--file2', type=str, required=True,
-                      help='Second text file with video filenames')
-    parser.add_argument('--output', type=str, default='video_comparison.txt',
-                      help='Output text file (default: video_comparison.txt)')
-    
-    args = parser.parse_args()
-    
-    unique1, unique2 = compare_files(args.file1, args.file2, args.output)
-    
-    if unique1 == 0 and unique2 == 0:
-        print("Both files contain the same set of videos!")
+# Hardcoded paths
+video_dir = r"f:\Uni_Stuff\6th_Sem\DL\Proj\video-asl-recognition\pose_estimation\data\WLASL100"
+json_path = r"f:\Uni_Stuff\6th_Sem\DL\Proj\video-asl-recognition\pose_estimation\data\WLASL100.json"
+
+# Get all video filenames (without extension) in the directory
+video_files = set(os.path.splitext(f)[0] for f in os.listdir(video_dir) if os.path.isfile(os.path.join(video_dir, f)))
+
+# Load all video_ids from the JSON
+with open(json_path, "r", encoding="utf-8") as f:
+    data = json.load(f)
+
+json_video_ids = set()
+for entry in data:
+    for inst in entry.get("instances", []):
+        json_video_ids.add(str(inst["video_id"]))
+
+# Find files in the directory not referenced in the JSON
+missing_in_json = [f for f in video_files if f not in json_video_ids]
+
+print("Files in directory but missing from JSON:")
+for fname in missing_in_json:
+    print(fname)
+print(f"Total missing: {len(missing_in_json)}")
