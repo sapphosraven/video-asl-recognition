@@ -2,258 +2,179 @@ import os
 import json
 import cv2
 import numpy as np
+import shutil
 from PIL import Image
 from collections import defaultdict
 import mediapipe as mp
-import shutil
+import gc
 
+# --- CONFIGURATION ---
+# Set to True to extract all frames, or False to sample a fixed number
+EXTRACT_ALL_FRAMES = True  # Set True for all frames, False for N frames
+FRAMES_TO_SAMPLE = 16       # Used only if EXTRACT_ALL_FRAMES is False
 
-class HandDetector:
-    def __init__(self):
-        self.mp_hands = mp.solutions.hands
-        self.hands = self.mp_hands.Hands(
-            static_image_mode=True,
-            max_num_hands=2,
-            min_detection_confidence=0.5
-        )
+VIDEOS_DIR = os.path.abspath(r'F:\Uni_Stuff\6th_Sem\DL\Proj\video-asl-recognition\pose_estimation\data\raw_videos_mp4')  # Directory with input videos
+OUTPUT_DIR = os.path.abspath(r'F:\Uni_Stuff\6th_Sem\DL\Proj\video-asl-recognition\pose_estimation\data\processed')        # Output directory for processed data
+JSON_PATH = os.path.abspath(r'F:\Uni_Stuff\6th_Sem\DL\Proj\video-asl-recognition\pose_estimation\data\WLASL100.json')    # Use WLASL100.json for this subset
+OUTPUT_IMAGE_SIZE = (224, 224)
 
-    def detect_and_crop_hands(self, frame, confidence_threshold=0.5):
-        """
-        Detect hands in the frame and return a cropped image containing both hands
-        with some padding around them.
-        """
-        # Convert BGR to RGB
-        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        height, width = frame.shape[:2]
-
-        # Detect hands
-        results = self.hands.process(frame_rgb)
-
-        if not results.multi_hand_landmarks:
-            return None, 0.0  # No hands detected
-
-        # Calculate average confidence
-        confidence = 0.0
-        num_hands = 0
-        if results.multi_handedness:
-            for hand_score in results.multi_handedness:
-                confidence += hand_score.classification[0].score
-                num_hands += 1
-            confidence = confidence / num_hands
-
-            if confidence < confidence_threshold:
-                return None, confidence
-
-        # Get bounding box for all detected hands
-        x_min, y_min = width, height
-        x_max, y_max = 0, 0
-
-        for hand_landmarks in results.multi_hand_landmarks:
-            for landmark in hand_landmarks.landmark:
-                x, y = int(landmark.x * width), int(landmark.y * height)
-                x_min = min(x_min, x)
-                x_max = max(x_max, x)
-                y_min = min(y_min, y)
-                y_max = max(y_max, y)
-
-        # Add padding around hands (30% of hand size)
-        padding_x = int((x_max - x_min) * 0.3)
-        padding_y = int((y_max - y_min) * 0.3)
-
-        x_min = max(0, x_min - padding_x)
-        x_max = min(width, x_max + padding_x)
-        y_min = max(0, y_min - padding_y)
-        y_max = min(height, y_max + padding_y)
-
-        # Crop the image to contain just the hands with padding
-        hands_crop = frame[y_min:y_max, x_min:x_max]
-
-        return (hands_crop, confidence) if hands_crop.size > 0 else (None, confidence)
-
-
-def load_json_data(json_path, top_n=100):
-    """Load JSON and filter for top N most common classes"""
+def load_json_data(json_path):
+    """Load all classes/instances from WLASL100.json (no filtering)."""
     with open(json_path, 'r') as f:
         data = json.load(f)
+    return data
 
-    # Count instances per class
-    class_counts = defaultdict(int)
-    for entry in data:
-        class_counts[entry['gloss']] += len(entry['instances'])
-
-    # Get top N classes
-    top_classes = sorted(class_counts.items(), key=lambda x: x[1], reverse=True)[:top_n]
-    top_class_names = {item[0] for item in top_classes}
-
-    # Filter data for top classes only
-    filtered_data = [entry for entry in data if entry['gloss'] in top_class_names]
-
-    total_instances = sum(len(entry['instances']) for entry in filtered_data)
-    print(f"Found {total_instances} videos in top {top_n} classes")
-
-    return filtered_data
-
-
-def extract_best_frame(video_path, hand_detector, frames_to_sample=5):
-    """
-    Extract multiple frames from the video and return the best one
-    with most confident hand detection
-    """
+def extract_frames(video_path, extract_all=EXTRACT_ALL_FRAMES, frames_to_sample=FRAMES_TO_SAMPLE, start_frame=None, end_frame=None):
     cap = cv2.VideoCapture(video_path)
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    fps = cap.get(cv2.CAP_PROP_FPS)
-
-    if total_frames == 0 or fps == 0:
+    if total_frames == 0:
         cap.release()
-        return None, 0.0
-
-    # Calculate frame indices to sample
-    # Skip first and last 15% of frames to avoid intro/outro
-    start_frame = int(total_frames * 0.15)
-    end_frame = int(total_frames * 0.85)
-    frames_to_check = np.linspace(start_frame, end_frame, frames_to_sample, dtype=int)
-
-    best_frame = None
-    best_confidence = 0.0
-
-    for frame_idx in frames_to_check:
-        cap.set(cv2.CAP_PROP_POS_FRAMES, frame_idx)
+        return []
+    # Restrict to sign segment if specified
+    if start_frame is not None and end_frame is not None:
+        start = max(0, int(start_frame))
+        end = min(total_frames, int(end_frame))
+        available_frames = end - start
+        if available_frames <= 0:
+            cap.release()
+            return []
+        if extract_all:
+            frames_idx = np.arange(start, end)
+        else:
+            frames_idx = np.linspace(start, end - 1, min(frames_to_sample, available_frames), dtype=int)
+    else:
+        if extract_all:
+            frames_idx = np.arange(0, total_frames)
+        else:
+            frames_idx = np.linspace(0, total_frames - 1, frames_to_sample, dtype=int)
+    frames = []
+    pose = mp.solutions.pose.Pose(static_image_mode=True, min_detection_confidence=0.5)
+    for idx in frames_idx:
+        cap.set(cv2.CAP_PROP_POS_FRAMES, idx)
         ret, frame = cap.read()
-
         if not ret:
             continue
-
-        # Detect hands and get confidence
-        hands_crop, confidence = hand_detector.detect_and_crop_hands(frame)
-
-        # Update best frame if this one has higher confidence
-        if confidence > best_confidence:
-            best_confidence = confidence
-            best_frame = frame
-
+        h, w = frame.shape[:2]
+        # Try to center crop on person using MediaPipe Pose
+        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        results = pose.process(frame_rgb)
+        if results.pose_landmarks:
+            left_shoulder = results.pose_landmarks.landmark[mp.solutions.pose.PoseLandmark.LEFT_SHOULDER]
+            right_shoulder = results.pose_landmarks.landmark[mp.solutions.pose.PoseLandmark.RIGHT_SHOULDER]
+            center_x = int((left_shoulder.x + right_shoulder.x) / 2 * w)
+            center_y = int((left_shoulder.y + right_shoulder.y) / 2 * h)
+            min_side = min(h, w)
+            half_side = min_side // 2
+            x_min = max(0, center_x - half_side)
+            x_max = min(w, center_x + half_side)
+            y_min = max(0, center_y - half_side)
+            y_max = min(h, center_y + half_side)
+            # Adjust if crop goes out of bounds
+            if x_max - x_min != min_side:
+                if x_min == 0:
+                    x_max = min_side
+                else:
+                    x_min = w - min_side
+            if y_max - y_min != min_side:
+                if y_min == 0:
+                    y_max = min_side
+                else:
+                    y_min = h - min_side
+            square_crop = frame[y_min:y_max, x_min:x_max]
+            if square_crop.shape[0] != min_side or square_crop.shape[1] != min_side:
+                # Fallback to center crop if something went wrong
+                top = (h - min_side) // 2
+                left = (w - min_side) // 2
+                square_crop = frame[top:top+min_side, left:left+min_side]
+        else:
+            # Fallback: center crop
+            min_side = min(h, w)
+            top = (h - min_side) // 2
+            left = (w - min_side) // 2
+            square_crop = frame[top:top+min_side, left:left+min_side]
+        frame_out = cv2.resize(square_crop, OUTPUT_IMAGE_SIZE)
+        frames.append(frame_out)
     cap.release()
-    return best_frame, best_confidence
+    return frames
 
-
-def create_image_dataset(json_path='WLASL_v0.3.json',
-                         videos_dir='videos',
-                         output_dir='wlasl_dataset',
-                         train_split=0.8,
-                         val_split=0.1,
-                         test_split=0.1,
-                         frames_to_sample=5):
-    # Initialize hand detector
-    hand_detector = HandDetector()
-    print("Initialized hand detector...")
-
-    # Load and filter data for top 100 classes
-    data = load_json_data(json_path, top_n=100)
-
-    # Create output directories
+def create_image_dataset(json_path=JSON_PATH,
+                         videos_dir=VIDEOS_DIR,
+                         output_dir=OUTPUT_DIR,
+                         extract_all=EXTRACT_ALL_FRAMES,
+                         frames_to_sample=FRAMES_TO_SAMPLE):
+    print(f"Initialized. EXTRACT_ALL_FRAMES={extract_all}")
+    data = load_json_data(json_path)
     os.makedirs(output_dir, exist_ok=True)
     splits = ['train', 'val', 'test']
     for split in splits:
         split_dir = os.path.join(output_dir, split)
         os.makedirs(split_dir, exist_ok=True)
-
     # Create label mapping
     label_mapping = {entry['gloss']: idx for idx, entry in enumerate(data)}
-
-    # Save label mapping
     with open(os.path.join(output_dir, 'label_mapping.txt'), 'w') as f:
         for gloss, idx in sorted(label_mapping.items(), key=lambda x: x[1]):
             f.write(f'{gloss},{idx}\n')
-
-    # Counters for tracking
     total_processed = 0
     total_failed = 0
-    no_hands_detected = 0
     split_counts = {split: 0 for split in splits}
     class_counts = defaultdict(lambda: defaultdict(int))
-
-    # Process each class
     for entry in data:
         gloss = entry['gloss']
         label_idx = label_mapping[gloss]
         instances = entry['instances']
-
         print(f"\nProcessing class: {gloss} ({len(instances)} videos)")
-
-        # Create class directories in each split
         for split in splits:
             class_dir = os.path.join(output_dir, split, gloss)
             os.makedirs(class_dir, exist_ok=True)
-
-        # Determine splits
-        n_total = len(instances)
-        n_train = int(n_total * train_split)
-        n_val = int(n_total * val_split)
-
-        # Shuffle instances
-        np.random.shuffle(instances)
-
-        # Process each video
-        for i, instance in enumerate(instances):
+        for instance in instances:
             video_id = instance['video_id']
             video_path = os.path.join(videos_dir, f'{video_id}.mp4')
-
+            split = instance.get('split', 'train')
+            # Use sign_start and sign_end if available
+            sign_start = instance.get('sign_start', None)
+            sign_end = instance.get('sign_end', None)
+            if split not in splits:
+                print(f"Warning: Unknown split '{split}' for {video_id}, defaulting to 'train'.")
+                split = 'train'
             if not os.path.exists(video_path):
                 print(f"Warning: Video not found - {video_path}")
                 total_failed += 1
                 continue
-
-            # Determine split for this instance
-            if i < n_train:
-                split = 'train'
-            elif i < n_train + n_val:
-                split = 'val'
-            else:
-                split = 'test'
-
             try:
-                # Extract best frame with hands
-                best_frame, confidence = extract_best_frame(video_path, hand_detector, frames_to_sample)
-
-                if best_frame is None:
-                    print(f"No suitable frame found in {video_path}")
-                    no_hands_detected += 1
+                frames = extract_frames(video_path, extract_all, frames_to_sample, sign_start, sign_end)
+                if not frames:
+                    print(f"No valid frames found in {video_path}")
+                    total_failed += 1
                     continue
-
-                # Detect and crop hands from the best frame
-                hands_crop, _ = hand_detector.detect_and_crop_hands(best_frame)
-
-                if hands_crop is None:
-                    print(f"No hands detected in best frame of {video_path}")
-                    no_hands_detected += 1
-                    continue
-
-                # Convert to PIL Image and resize
-                image = Image.fromarray(cv2.cvtColor(hands_crop, cv2.COLOR_BGR2RGB))
-                image = image.resize((224, 224), Image.LANCZOS)
-
-                # Save processed image in class subdirectory
-                save_path = os.path.join(output_dir, split, gloss, f'{video_id}.jpg')
-                image.save(save_path)
-
+                for j, frame in enumerate(frames):
+                    if not extract_all and frames_to_sample == 1:
+                        save_path = os.path.join(output_dir, split, gloss, f'{video_id}.jpg')
+                        Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)).save(save_path)
+                        break
+                    else:
+                        save_path = os.path.join(output_dir, split, gloss, f'{video_id}_f{j}.jpg')
+                        Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)).save(save_path)
                 total_processed += 1
                 split_counts[split] += 1
                 class_counts[split][gloss] += 1
-
+            except MemoryError:
+                print(f"MemoryError processing {video_path}: skipping video.")
+                total_failed += 1
+                continue
             except Exception as e:
                 print(f"Error processing {video_path}: {str(e)}")
                 total_failed += 1
                 continue
-
-    # Print initial statistics
-    print("\nInitial Processing completed!")
+            finally:
+                del frames
+                gc.collect()
+    print("\nProcessing completed!")
     print(f"Total videos processed successfully: {total_processed}")
     print(f"Total videos failed: {total_failed}")
-    print(f"Videos with no hands detected: {no_hands_detected}")
-    print("\nInitial split distribution:")
+    print("\nSplit distribution:")
     for split in splits:
         print(f"{split} set: {split_counts[split]} videos")
         print(f"Number of classes in {split}: {len(class_counts[split])}")
-
 
 def cleanup_and_validate_dataset(output_dir='wlasl_dataset'):
     """
@@ -396,13 +317,8 @@ def main():
         import subprocess
         subprocess.check_call(["pip", "install", "mediapipe"])
 
-    # Step 1: Create dataset with hand detection
-    create_image_dataset(
-        train_split=0.8,
-        val_split=0.1,
-        test_split=0.1,
-        frames_to_sample=5  # Sample 5 frames from each video
-    )
+    # Step 1: Create dataset
+    create_image_dataset()
 
     # Step 2: Clean up and validate dataset
     stats = cleanup_and_validate_dataset()
@@ -412,7 +328,7 @@ def main():
 
     print("\nDataset processing complete!")
     print("The dataset now contains:")
-    print("1. Frames with best hand detections")
+    print("1. Frames resized to 224x224")
     print("2. Consistent classes across all splits")
     print("3. No empty folders")
 
