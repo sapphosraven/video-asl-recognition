@@ -55,6 +55,7 @@ for folder in sorted(DATA_DIR.iterdir(), key=lambda p: p.name):
         e = info['end'] if info['end'] >= 0 else total
         s_frame = max(0, min(int(s), total - 1))
         e_frame = max(s_frame + 1, min(int(e), total))
+        
 
         if s_frame >= e_frame:
             print(f"  • [{vid_id}] bad range {s_frame}–{e_frame}")
