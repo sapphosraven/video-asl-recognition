@@ -1,0 +1,1815 @@
+{
+    "about": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+    },
+    "accident": {
+        "precision": 1.0,
+        "recall": 0.8979591836734694,
+        "f1-score": 0.9462365591397849,
+        "support": 49.0
+    },
+    "africa": {
+        "precision": 1.0,
+        "recall": 0.9807692307692307,
+        "f1-score": 0.9902912621359222,
+        "support": 52.0
+    },
+    "again": {
+        "precision": 1.0,
+        "recall": 0.9487179487179487,
+        "f1-score": 0.9736842105263158,
+        "support": 39.0
+    },
+    "all": {
+        "precision": 1.0,
+        "recall": 0.9302325581395349,
+        "f1-score": 0.963855421686747,
+        "support": 43.0
+    },
+    "always": {
+        "precision": 1.0,
+        "recall": 0.96875,
+        "f1-score": 0.9841269841269841,
+        "support": 32.0
+    },
+    "animal": {
+        "precision": 0.8888888888888888,
+        "recall": 1.0,
+        "f1-score": 0.9411764705882353,
+        "support": 32.0
+    },
+    "apple": {
+        "precision": 1.0,
+        "recall": 0.9811320754716981,
+        "f1-score": 0.9904761904761905,
+        "support": 53.0
+    },
+    "approve": {
+        "precision": 1.0,
+        "recall": 0.8787878787878788,
+        "f1-score": 0.9354838709677419,
+        "support": 33.0
+    },
+    "argue": {
+        "precision": 0.925,
+        "recall": 0.9487179487179487,
+        "f1-score": 0.9367088607594937,
+        "support": 39.0
+    },
+    "arrive": {
+        "precision": 0.9743589743589743,
+        "recall": 0.9743589743589743,
+        "f1-score": 0.9743589743589743,
+        "support": 39.0
+    },
+    "baby": {
+        "precision": 0.9615384615384616,
+        "recall": 0.8928571428571429,
+        "f1-score": 0.9259259259259259,
+        "support": 28.0
+    },
+    "back": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 27.0
+    },
+    "backpack": {
+        "precision": 0.972972972972973,
+        "recall": 0.9473684210526315,
+        "f1-score": 0.9599999999999999,
+        "support": 38.0
+    },
+    "bad": {
+        "precision": 0.9743589743589743,
+        "recall": 0.9743589743589743,
+        "f1-score": 0.9743589743589743,
+        "support": 39.0
+    },
+    "bake": {
+        "precision": 0.9666666666666667,
+        "recall": 1.0,
+        "f1-score": 0.983050847457627,
+        "support": 29.0
+    },
+    "balance": {
+        "precision": 0.9777777777777777,
+        "recall": 1.0,
+        "f1-score": 0.9887640449438202,
+        "support": 44.0
+    },
+    "ball": {
+        "precision": 0.88,
+        "recall": 0.9777777777777777,
+        "f1-score": 0.9263157894736842,
+        "support": 45.0
+    },
+    "banana": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 37.0
+    },
+    "bar": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 36.0
+    },
+    "basketball": {
+        "precision": 1.0,
+        "recall": 0.9761904761904762,
+        "f1-score": 0.9879518072289156,
+        "support": 42.0
+    },
+    "bath": {
+        "precision": 0.8974358974358975,
+        "recall": 1.0,
+        "f1-score": 0.945945945945946,
+        "support": 35.0
+    },
+    "bathroom": {
+        "precision": 1.0,
+        "recall": 0.9722222222222222,
+        "f1-score": 0.9859154929577464,
+        "support": 36.0
+    },
+    "beard": {
+        "precision": 0.90625,
+        "recall": 0.8285714285714286,
+        "f1-score": 0.8656716417910447,
+        "support": 35.0
+    },
+    "because": {
+        "precision": 0.9655172413793104,
+        "recall": 1.0,
+        "f1-score": 0.9824561403508771,
+        "support": 28.0
+    },
+    "bed": {
+        "precision": 0.8837209302325582,
+        "recall": 1.0,
+        "f1-score": 0.9382716049382717,
+        "support": 38.0
+    },
+    "before": {
+        "precision": 0.8727272727272727,
+        "recall": 0.75,
+        "f1-score": 0.8067226890756303,
+        "support": 64.0
+    },
+    "behind": {
+        "precision": 0.9375,
+        "recall": 0.967741935483871,
+        "f1-score": 0.9523809523809523,
+        "support": 31.0
+    },
+    "bird": {
+        "precision": 1.0,
+        "recall": 0.8974358974358975,
+        "f1-score": 0.945945945945946,
+        "support": 39.0
+    },
+    "birthday": {
+        "precision": 0.975609756097561,
+        "recall": 0.9523809523809523,
+        "f1-score": 0.963855421686747,
+        "support": 42.0
+    },
+    "black": {
+        "precision": 0.9791666666666666,
+        "recall": 1.0,
+        "f1-score": 0.9894736842105264,
+        "support": 47.0
+    },
+    "blanket": {
+        "precision": 1.0,
+        "recall": 0.9166666666666666,
+        "f1-score": 0.9565217391304348,
+        "support": 36.0
+    },
+    "blue": {
+        "precision": 1.0,
+        "recall": 0.8857142857142857,
+        "f1-score": 0.9393939393939393,
+        "support": 35.0
+    },
+    "book": {
+        "precision": 1.0,
+        "recall": 0.9090909090909091,
+        "f1-score": 0.9523809523809523,
+        "support": 44.0
+    },
+    "bowling": {
+        "precision": 0.9807692307692307,
+        "recall": 1.0,
+        "f1-score": 0.9902912621359222,
+        "support": 51.0
+    },
+    "boy": {
+        "precision": 0.9736842105263158,
+        "recall": 1.0,
+        "f1-score": 0.9866666666666666,
+        "support": 37.0
+    },
+    "bring": {
+        "precision": 0.975,
+        "recall": 1.0,
+        "f1-score": 0.9873417721518987,
+        "support": 39.0
+    },
+    "brother": {
+        "precision": 0.972972972972973,
+        "recall": 0.9230769230769231,
+        "f1-score": 0.9473684210526315,
+        "support": 39.0
+    },
+    "brown": {
+        "precision": 1.0,
+        "recall": 0.9767441860465116,
+        "f1-score": 0.988235294117647,
+        "support": 43.0
+    },
+    "business": {
+        "precision": 0.9736842105263158,
+        "recall": 1.0,
+        "f1-score": 0.9866666666666666,
+        "support": 37.0
+    },
+    "but": {
+        "precision": 0.9714285714285714,
+        "recall": 0.9444444444444444,
+        "f1-score": 0.9577464788732395,
+        "support": 36.0
+    },
+    "buy": {
+        "precision": 1.0,
+        "recall": 0.95,
+        "f1-score": 0.9743589743589743,
+        "support": 40.0
+    },
+    "call": {
+        "precision": 0.967741935483871,
+        "recall": 0.967741935483871,
+        "f1-score": 0.967741935483871,
+        "support": 31.0
+    },
+    "can": {
+        "precision": 0.9411764705882353,
+        "recall": 1.0,
+        "f1-score": 0.9696969696969697,
+        "support": 48.0
+    },
+    "candy": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 50.0
+    },
+    "careful": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 32.0
+    },
+    "cat": {
+        "precision": 0.8974358974358975,
+        "recall": 1.0,
+        "f1-score": 0.945945945945946,
+        "support": 35.0
+    },
+    "catch": {
+        "precision": 1.0,
+        "recall": 0.9655172413793104,
+        "f1-score": 0.9824561403508771,
+        "support": 29.0
+    },
+    "center": {
+        "precision": 1.0,
+        "recall": 0.9375,
+        "f1-score": 0.967741935483871,
+        "support": 32.0
+    },
+    "cereal": {
+        "precision": 0.96875,
+        "recall": 0.96875,
+        "f1-score": 0.96875,
+        "support": 32.0
+    },
+    "chair": {
+        "precision": 0.9795918367346939,
+        "recall": 0.96,
+        "f1-score": 0.9696969696969697,
+        "support": 50.0
+    },
+    "champion": {
+        "precision": 1.0,
+        "recall": 0.9615384615384616,
+        "f1-score": 0.9803921568627451,
+        "support": 26.0
+    },
+    "change": {
+        "precision": 0.9782608695652174,
+        "recall": 0.9782608695652174,
+        "f1-score": 0.9782608695652174,
+        "support": 46.0
+    },
+    "chat": {
+        "precision": 0.9736842105263158,
+        "recall": 0.9736842105263158,
+        "f1-score": 0.9736842105263158,
+        "support": 38.0
+    },
+    "cheat": {
+        "precision": 0.9767441860465116,
+        "recall": 1.0,
+        "f1-score": 0.988235294117647,
+        "support": 42.0
+    },
+    "check": {
+        "precision": 0.9655172413793104,
+        "recall": 0.8484848484848485,
+        "f1-score": 0.9032258064516129,
+        "support": 33.0
+    },
+    "cheese": {
+        "precision": 0.9722222222222222,
+        "recall": 0.9722222222222222,
+        "f1-score": 0.9722222222222222,
+        "support": 36.0
+    },
+    "children": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 25.0
+    },
+    "christmas": {
+        "precision": 0.9642857142857143,
+        "recall": 0.9310344827586207,
+        "f1-score": 0.9473684210526316,
+        "support": 29.0
+    },
+    "city": {
+        "precision": 1.0,
+        "recall": 0.9361702127659575,
+        "f1-score": 0.967032967032967,
+        "support": 47.0
+    },
+    "class": {
+        "precision": 0.975,
+        "recall": 0.8297872340425532,
+        "f1-score": 0.896551724137931,
+        "support": 47.0
+    },
+    "clock": {
+        "precision": 0.9615384615384616,
+        "recall": 0.9615384615384616,
+        "f1-score": 0.9615384615384616,
+        "support": 26.0
+    },
+    "close": {
+        "precision": 0.8611111111111112,
+        "recall": 1.0,
+        "f1-score": 0.9253731343283582,
+        "support": 31.0
+    },
+    "clothes": {
+        "precision": 0.9393939393939394,
+        "recall": 0.9393939393939394,
+        "f1-score": 0.9393939393939394,
+        "support": 33.0
+    },
+    "coffee": {
+        "precision": 1.0,
+        "recall": 0.9615384615384616,
+        "f1-score": 0.9803921568627451,
+        "support": 26.0
+    },
+    "cold": {
+        "precision": 0.9629629629629629,
+        "recall": 0.9285714285714286,
+        "f1-score": 0.9454545454545454,
+        "support": 28.0
+    },
+    "college": {
+        "precision": 0.8888888888888888,
+        "recall": 0.9523809523809523,
+        "f1-score": 0.9195402298850575,
+        "support": 42.0
+    },
+    "color": {
+        "precision": 0.9782608695652174,
+        "recall": 1.0,
+        "f1-score": 0.989010989010989,
+        "support": 45.0
+    },
+    "computer": {
+        "precision": 0.9344262295081968,
+        "recall": 0.95,
+        "f1-score": 0.9421487603305784,
+        "support": 60.0
+    },
+    "convince": {
+        "precision": 0.9375,
+        "recall": 0.967741935483871,
+        "f1-score": 0.9523809523809523,
+        "support": 31.0
+    },
+    "cook": {
+        "precision": 0.9534883720930233,
+        "recall": 0.9318181818181818,
+        "f1-score": 0.942528735632184,
+        "support": 44.0
+    },
+    "cool": {
+        "precision": 0.972972972972973,
+        "recall": 0.972972972972973,
+        "f1-score": 0.972972972972973,
+        "support": 37.0
+    },
+    "copy": {
+        "precision": 0.9259259259259259,
+        "recall": 1.0,
+        "f1-score": 0.9615384615384615,
+        "support": 25.0
+    },
+    "corn": {
+        "precision": 1.0,
+        "recall": 0.9473684210526315,
+        "f1-score": 0.972972972972973,
+        "support": 38.0
+    },
+    "cough": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 25.0
+    },
+    "country": {
+        "precision": 1.0,
+        "recall": 0.9736842105263158,
+        "f1-score": 0.9866666666666666,
+        "support": 38.0
+    },
+    "cousin": {
+        "precision": 0.972972972972973,
+        "recall": 0.972972972972973,
+        "f1-score": 0.972972972972973,
+        "support": 37.0
+    },
+    "cow": {
+        "precision": 1.0,
+        "recall": 0.9333333333333333,
+        "f1-score": 0.9655172413793104,
+        "support": 45.0
+    },
+    "crash": {
+        "precision": 0.868421052631579,
+        "recall": 0.8918918918918919,
+        "f1-score": 0.88,
+        "support": 37.0
+    },
+    "crazy": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 50.0
+    },
+    "cry": {
+        "precision": 0.7692307692307693,
+        "recall": 0.8571428571428571,
+        "f1-score": 0.8108108108108107,
+        "support": 35.0
+    },
+    "cute": {
+        "precision": 0.9655172413793104,
+        "recall": 1.0,
+        "f1-score": 0.9824561403508771,
+        "support": 28.0
+    },
+    "dance": {
+        "precision": 0.9473684210526315,
+        "recall": 0.972972972972973,
+        "f1-score": 0.9599999999999999,
+        "support": 37.0
+    },
+    "dark": {
+        "precision": 1.0,
+        "recall": 0.9772727272727273,
+        "f1-score": 0.9885057471264368,
+        "support": 44.0
+    },
+    "daughter": {
+        "precision": 1.0,
+        "recall": 0.95,
+        "f1-score": 0.9743589743589743,
+        "support": 40.0
+    },
+    "day": {
+        "precision": 1.0,
+        "recall": 0.96875,
+        "f1-score": 0.9841269841269841,
+        "support": 32.0
+    },
+    "deaf": {
+        "precision": 0.9387755102040817,
+        "recall": 0.9787234042553191,
+        "f1-score": 0.9583333333333333,
+        "support": 47.0
+    },
+    "decide": {
+        "precision": 1.0,
+        "recall": 0.9347826086956522,
+        "f1-score": 0.9662921348314606,
+        "support": 46.0
+    },
+    "delay": {
+        "precision": 1.0,
+        "recall": 0.9714285714285714,
+        "f1-score": 0.9855072463768115,
+        "support": 35.0
+    },
+    "delicious": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 33.0
+    },
+    "different": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 31.0
+    },
+    "disappear": {
+        "precision": 1.0,
+        "recall": 0.9032258064516129,
+        "f1-score": 0.9491525423728813,
+        "support": 31.0
+    },
+    "discuss": {
+        "precision": 1.0,
+        "recall": 0.9565217391304348,
+        "f1-score": 0.9777777777777777,
+        "support": 46.0
+    },
+    "divorce": {
+        "precision": 1.0,
+        "recall": 0.9629629629629629,
+        "f1-score": 0.9811320754716981,
+        "support": 27.0
+    },
+    "doctor": {
+        "precision": 1.0,
+        "recall": 0.9722222222222222,
+        "f1-score": 0.9859154929577464,
+        "support": 36.0
+    },
+    "dog": {
+        "precision": 0.8431372549019608,
+        "recall": 1.0,
+        "f1-score": 0.9148936170212766,
+        "support": 43.0
+    },
+    "door": {
+        "precision": 0.9523809523809523,
+        "recall": 0.9523809523809523,
+        "f1-score": 0.9523809523809523,
+        "support": 42.0
+    },
+    "draw": {
+        "precision": 0.9285714285714286,
+        "recall": 0.9512195121951219,
+        "f1-score": 0.9397590361445782,
+        "support": 41.0
+    },
+    "dress": {
+        "precision": 1.0,
+        "recall": 0.9090909090909091,
+        "f1-score": 0.9523809523809523,
+        "support": 33.0
+    },
+    "drink": {
+        "precision": 0.9868421052631579,
+        "recall": 0.9868421052631579,
+        "f1-score": 0.9868421052631579,
+        "support": 76.0
+    },
+    "drive": {
+        "precision": 0.9642857142857143,
+        "recall": 1.0,
+        "f1-score": 0.9818181818181818,
+        "support": 27.0
+    },
+    "drop": {
+        "precision": 0.967741935483871,
+        "recall": 0.9375,
+        "f1-score": 0.9523809523809523,
+        "support": 32.0
+    },
+    "east": {
+        "precision": 1.0,
+        "recall": 0.9615384615384616,
+        "f1-score": 0.9803921568627451,
+        "support": 26.0
+    },
+    "easy": {
+        "precision": 0.9629629629629629,
+        "recall": 1.0,
+        "f1-score": 0.9811320754716981,
+        "support": 26.0
+    },
+    "eat": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 31.0
+    },
+    "egg": {
+        "precision": 1.0,
+        "recall": 0.96875,
+        "f1-score": 0.9841269841269841,
+        "support": 32.0
+    },
+    "enjoy": {
+        "precision": 0.9772727272727273,
+        "recall": 1.0,
+        "f1-score": 0.9885057471264368,
+        "support": 43.0
+    },
+    "environment": {
+        "precision": 0.9166666666666666,
+        "recall": 0.9166666666666666,
+        "f1-score": 0.9166666666666666,
+        "support": 24.0
+    },
+    "example": {
+        "precision": 0.9090909090909091,
+        "recall": 1.0,
+        "f1-score": 0.9523809523809523,
+        "support": 30.0
+    },
+    "family": {
+        "precision": 0.9148936170212766,
+        "recall": 0.9772727272727273,
+        "f1-score": 0.945054945054945,
+        "support": 44.0
+    },
+    "far": {
+        "precision": 1.0,
+        "recall": 0.9791666666666666,
+        "f1-score": 0.9894736842105264,
+        "support": 48.0
+    },
+    "fat": {
+        "precision": 0.9743589743589743,
+        "recall": 0.95,
+        "f1-score": 0.9620253164556962,
+        "support": 40.0
+    },
+    "father": {
+        "precision": 0.9473684210526315,
+        "recall": 0.972972972972973,
+        "f1-score": 0.9599999999999999,
+        "support": 37.0
+    },
+    "fault": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 24.0
+    },
+    "feel": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 36.0
+    },
+    "fine": {
+        "precision": 0.975,
+        "recall": 0.975,
+        "f1-score": 0.975,
+        "support": 40.0
+    },
+    "finish": {
+        "precision": 0.9761904761904762,
+        "recall": 1.0,
+        "f1-score": 0.9879518072289156,
+        "support": 41.0
+    },
+    "first": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 39.0
+    },
+    "fish": {
+        "precision": 0.9534883720930233,
+        "recall": 0.9761904761904762,
+        "f1-score": 0.9647058823529412,
+        "support": 42.0
+    },
+    "flower": {
+        "precision": 0.9767441860465116,
+        "recall": 0.9333333333333333,
+        "f1-score": 0.9545454545454545,
+        "support": 45.0
+    },
+    "football": {
+        "precision": 0.9285714285714286,
+        "recall": 0.9629629629629629,
+        "f1-score": 0.9454545454545454,
+        "support": 27.0
+    },
+    "forget": {
+        "precision": 1.0,
+        "recall": 0.975,
+        "f1-score": 0.9873417721518987,
+        "support": 40.0
+    },
+    "friend": {
+        "precision": 0.8974358974358975,
+        "recall": 0.9459459459459459,
+        "f1-score": 0.9210526315789475,
+        "support": 37.0
+    },
+    "friendly": {
+        "precision": 0.8974358974358975,
+        "recall": 0.8974358974358975,
+        "f1-score": 0.8974358974358975,
+        "support": 39.0
+    },
+    "full": {
+        "precision": 0.9655172413793104,
+        "recall": 1.0,
+        "f1-score": 0.9824561403508771,
+        "support": 28.0
+    },
+    "future": {
+        "precision": 1.0,
+        "recall": 0.9655172413793104,
+        "f1-score": 0.9824561403508771,
+        "support": 29.0
+    },
+    "game": {
+        "precision": 0.967741935483871,
+        "recall": 0.9375,
+        "f1-score": 0.9523809523809523,
+        "support": 32.0
+    },
+    "girl": {
+        "precision": 1.0,
+        "recall": 0.96,
+        "f1-score": 0.9795918367346939,
+        "support": 25.0
+    },
+    "give": {
+        "precision": 0.9722222222222222,
+        "recall": 0.9459459459459459,
+        "f1-score": 0.9589041095890412,
+        "support": 37.0
+    },
+    "glasses": {
+        "precision": 0.9705882352941176,
+        "recall": 0.9705882352941176,
+        "f1-score": 0.9705882352941176,
+        "support": 34.0
+    },
+    "go": {
+        "precision": 0.9090909090909091,
+        "recall": 0.9433962264150944,
+        "f1-score": 0.9259259259259259,
+        "support": 53.0
+    },
+    "good": {
+        "precision": 0.9736842105263158,
+        "recall": 0.925,
+        "f1-score": 0.9487179487179489,
+        "support": 40.0
+    },
+    "government": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 28.0
+    },
+    "graduate": {
+        "precision": 1.0,
+        "recall": 0.9772727272727273,
+        "f1-score": 0.9885057471264368,
+        "support": 44.0
+    },
+    "green": {
+        "precision": 1.0,
+        "recall": 0.925,
+        "f1-score": 0.961038961038961,
+        "support": 40.0
+    },
+    "hair": {
+        "precision": 1.0,
+        "recall": 0.9736842105263158,
+        "f1-score": 0.9866666666666666,
+        "support": 38.0
+    },
+    "halloween": {
+        "precision": 0.9714285714285714,
+        "recall": 0.85,
+        "f1-score": 0.9066666666666667,
+        "support": 40.0
+    },
+    "happy": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 35.0
+    },
+    "hard": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 23.0
+    },
+    "hat": {
+        "precision": 1.0,
+        "recall": 0.9814814814814815,
+        "f1-score": 0.9906542056074767,
+        "support": 54.0
+    },
+    "have": {
+        "precision": 1.0,
+        "recall": 0.9777777777777777,
+        "f1-score": 0.9887640449438202,
+        "support": 45.0
+    },
+    "headache": {
+        "precision": 0.9782608695652174,
+        "recall": 1.0,
+        "f1-score": 0.989010989010989,
+        "support": 45.0
+    },
+    "hear": {
+        "precision": 1.0,
+        "recall": 0.9743589743589743,
+        "f1-score": 0.9870129870129869,
+        "support": 39.0
+    },
+    "hearing": {
+        "precision": 0.9574468085106383,
+        "recall": 1.0,
+        "f1-score": 0.9782608695652174,
+        "support": 45.0
+    },
+    "heart": {
+        "precision": 0.9714285714285714,
+        "recall": 0.9714285714285714,
+        "f1-score": 0.9714285714285714,
+        "support": 35.0
+    },
+    "help": {
+        "precision": 0.9361702127659575,
+        "recall": 0.9777777777777777,
+        "f1-score": 0.9565217391304347,
+        "support": 45.0
+    },
+    "here": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 26.0
+    },
+    "home": {
+        "precision": 0.975609756097561,
+        "recall": 0.975609756097561,
+        "f1-score": 0.975609756097561,
+        "support": 41.0
+    },
+    "hope": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 39.0
+    },
+    "hot": {
+        "precision": 0.95,
+        "recall": 1.0,
+        "f1-score": 0.9743589743589743,
+        "support": 57.0
+    },
+    "hour": {
+        "precision": 0.9714285714285714,
+        "recall": 0.9714285714285714,
+        "f1-score": 0.9714285714285714,
+        "support": 35.0
+    },
+    "house": {
+        "precision": 0.7948717948717948,
+        "recall": 0.96875,
+        "f1-score": 0.8732394366197183,
+        "support": 32.0
+    },
+    "how": {
+        "precision": 0.825,
+        "recall": 0.9166666666666666,
+        "f1-score": 0.8684210526315789,
+        "support": 36.0
+    },
+    "humble": {
+        "precision": 0.9259259259259259,
+        "recall": 0.7575757575757576,
+        "f1-score": 0.8333333333333334,
+        "support": 33.0
+    },
+    "hurry": {
+        "precision": 1.0,
+        "recall": 0.96,
+        "f1-score": 0.9795918367346939,
+        "support": 25.0
+    },
+    "husband": {
+        "precision": 0.8888888888888888,
+        "recall": 0.9411764705882353,
+        "f1-score": 0.9142857142857143,
+        "support": 34.0
+    },
+    "improve": {
+        "precision": 1.0,
+        "recall": 0.9428571428571428,
+        "f1-score": 0.9705882352941176,
+        "support": 35.0
+    },
+    "inform": {
+        "precision": 0.813953488372093,
+        "recall": 0.9722222222222222,
+        "f1-score": 0.8860759493670887,
+        "support": 36.0
+    },
+    "interest": {
+        "precision": 1.0,
+        "recall": 0.9354838709677419,
+        "f1-score": 0.9666666666666666,
+        "support": 31.0
+    },
+    "internet": {
+        "precision": 0.8888888888888888,
+        "recall": 1.0,
+        "f1-score": 0.9411764705882353,
+        "support": 32.0
+    },
+    "jacket": {
+        "precision": 0.9767441860465116,
+        "recall": 0.9545454545454546,
+        "f1-score": 0.9655172413793104,
+        "support": 44.0
+    },
+    "join": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 31.0
+    },
+    "jump": {
+        "precision": 0.96875,
+        "recall": 0.96875,
+        "f1-score": 0.96875,
+        "support": 32.0
+    },
+    "kill": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 25.0
+    },
+    "kiss": {
+        "precision": 0.918918918918919,
+        "recall": 0.9444444444444444,
+        "f1-score": 0.9315068493150684,
+        "support": 36.0
+    },
+    "knife": {
+        "precision": 0.9696969696969697,
+        "recall": 1.0,
+        "f1-score": 0.9846153846153847,
+        "support": 32.0
+    },
+    "know": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 34.0
+    },
+    "language": {
+        "precision": 0.9210526315789473,
+        "recall": 1.0,
+        "f1-score": 0.958904109589041,
+        "support": 35.0
+    },
+    "last": {
+        "precision": 0.6060606060606061,
+        "recall": 0.6666666666666666,
+        "f1-score": 0.6349206349206349,
+        "support": 30.0
+    },
+    "late": {
+        "precision": 1.0,
+        "recall": 0.972972972972973,
+        "f1-score": 0.9863013698630138,
+        "support": 37.0
+    },
+    "later": {
+        "precision": 0.9090909090909091,
+        "recall": 1.0,
+        "f1-score": 0.9523809523809523,
+        "support": 40.0
+    },
+    "laugh": {
+        "precision": 1.0,
+        "recall": 0.975,
+        "f1-score": 0.9873417721518987,
+        "support": 40.0
+    },
+    "law": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 33.0
+    },
+    "learn": {
+        "precision": 0.9583333333333334,
+        "recall": 0.9583333333333334,
+        "f1-score": 0.9583333333333334,
+        "support": 48.0
+    },
+    "leave": {
+        "precision": 0.9333333333333333,
+        "recall": 0.8484848484848485,
+        "f1-score": 0.888888888888889,
+        "support": 33.0
+    },
+    "letter": {
+        "precision": 1.0,
+        "recall": 0.9183673469387755,
+        "f1-score": 0.9574468085106383,
+        "support": 49.0
+    },
+    "light": {
+        "precision": 0.9666666666666667,
+        "recall": 0.9666666666666667,
+        "f1-score": 0.9666666666666667,
+        "support": 30.0
+    },
+    "like": {
+        "precision": 0.9622641509433962,
+        "recall": 0.9807692307692307,
+        "f1-score": 0.9714285714285713,
+        "support": 52.0
+    },
+    "list": {
+        "precision": 0.9487179487179487,
+        "recall": 0.9024390243902439,
+        "f1-score": 0.9249999999999999,
+        "support": 41.0
+    },
+    "live": {
+        "precision": 1.0,
+        "recall": 0.95,
+        "f1-score": 0.9743589743589743,
+        "support": 20.0
+    },
+    "lose": {
+        "precision": 1.0,
+        "recall": 0.975,
+        "f1-score": 0.9873417721518987,
+        "support": 40.0
+    },
+    "make": {
+        "precision": 0.972972972972973,
+        "recall": 0.9473684210526315,
+        "f1-score": 0.9599999999999999,
+        "support": 38.0
+    },
+    "man": {
+        "precision": 1.0,
+        "recall": 0.9512195121951219,
+        "f1-score": 0.975,
+        "support": 41.0
+    },
+    "many": {
+        "precision": 0.9245283018867925,
+        "recall": 1.0,
+        "f1-score": 0.9607843137254902,
+        "support": 49.0
+    },
+    "match": {
+        "precision": 0.85,
+        "recall": 0.9714285714285714,
+        "f1-score": 0.9066666666666667,
+        "support": 35.0
+    },
+    "mean": {
+        "precision": 1.0,
+        "recall": 0.9,
+        "f1-score": 0.9473684210526316,
+        "support": 30.0
+    },
+    "meat": {
+        "precision": 1.0,
+        "recall": 0.8823529411764706,
+        "f1-score": 0.9375,
+        "support": 34.0
+    },
+    "medicine": {
+        "precision": 0.9565217391304348,
+        "recall": 0.7586206896551724,
+        "f1-score": 0.8461538461538461,
+        "support": 29.0
+    },
+    "meet": {
+        "precision": 0.9107142857142857,
+        "recall": 0.9444444444444444,
+        "f1-score": 0.9272727272727271,
+        "support": 54.0
+    },
+    "milk": {
+        "precision": 1.0,
+        "recall": 0.9428571428571428,
+        "f1-score": 0.9705882352941176,
+        "support": 35.0
+    },
+    "money": {
+        "precision": 0.96,
+        "recall": 0.96,
+        "f1-score": 0.96,
+        "support": 25.0
+    },
+    "more": {
+        "precision": 1.0,
+        "recall": 0.9411764705882353,
+        "f1-score": 0.9696969696969697,
+        "support": 34.0
+    },
+    "most": {
+        "precision": 0.9428571428571428,
+        "recall": 0.9166666666666666,
+        "f1-score": 0.9295774647887323,
+        "support": 36.0
+    },
+    "mother": {
+        "precision": 0.9361702127659575,
+        "recall": 0.9777777777777777,
+        "f1-score": 0.9565217391304347,
+        "support": 45.0
+    },
+    "movie": {
+        "precision": 1.0,
+        "recall": 0.875,
+        "f1-score": 0.9333333333333333,
+        "support": 24.0
+    },
+    "music": {
+        "precision": 0.95,
+        "recall": 1.0,
+        "f1-score": 0.9743589743589743,
+        "support": 38.0
+    },
+    "name": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 22.0
+    },
+    "need": {
+        "precision": 1.0,
+        "recall": 0.9767441860465116,
+        "f1-score": 0.988235294117647,
+        "support": 43.0
+    },
+    "new": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 36.0
+    },
+    "no": {
+        "precision": 1.0,
+        "recall": 0.9777777777777777,
+        "f1-score": 0.9887640449438202,
+        "support": 45.0
+    },
+    "none": {
+        "precision": 0.9655172413793104,
+        "recall": 0.9655172413793104,
+        "f1-score": 0.9655172413793104,
+        "support": 29.0
+    },
+    "now": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 50.0
+    },
+    "office": {
+        "precision": 0.9722222222222222,
+        "recall": 0.9722222222222222,
+        "f1-score": 0.9722222222222222,
+        "support": 36.0
+    },
+    "old": {
+        "precision": 1.0,
+        "recall": 0.9705882352941176,
+        "f1-score": 0.9850746268656716,
+        "support": 34.0
+    },
+    "orange": {
+        "precision": 0.9545454545454546,
+        "recall": 1.0,
+        "f1-score": 0.9767441860465117,
+        "support": 63.0
+    },
+    "order": {
+        "precision": 0.8518518518518519,
+        "recall": 0.92,
+        "f1-score": 0.8846153846153846,
+        "support": 25.0
+    },
+    "paint": {
+        "precision": 0.96875,
+        "recall": 0.9393939393939394,
+        "f1-score": 0.9538461538461539,
+        "support": 33.0
+    },
+    "pants": {
+        "precision": 1.0,
+        "recall": 0.9523809523809523,
+        "f1-score": 0.975609756097561,
+        "support": 21.0
+    },
+    "paper": {
+        "precision": 0.8936170212765957,
+        "recall": 0.9333333333333333,
+        "f1-score": 0.9130434782608695,
+        "support": 45.0
+    },
+    "party": {
+        "precision": 0.84,
+        "recall": 0.84,
+        "f1-score": 0.8399999999999999,
+        "support": 25.0
+    },
+    "past": {
+        "precision": 0.7352941176470589,
+        "recall": 0.7352941176470589,
+        "f1-score": 0.735294117647059,
+        "support": 34.0
+    },
+    "pencil": {
+        "precision": 0.967741935483871,
+        "recall": 0.9375,
+        "f1-score": 0.9523809523809523,
+        "support": 32.0
+    },
+    "person": {
+        "precision": 1.0,
+        "recall": 0.896551724137931,
+        "f1-score": 0.9454545454545454,
+        "support": 29.0
+    },
+    "pink": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 57.0
+    },
+    "pizza": {
+        "precision": 1.0,
+        "recall": 0.9824561403508771,
+        "f1-score": 0.9911504424778761,
+        "support": 57.0
+    },
+    "plan": {
+        "precision": 0.972972972972973,
+        "recall": 0.9,
+        "f1-score": 0.935064935064935,
+        "support": 40.0
+    },
+    "play": {
+        "precision": 0.9705882352941176,
+        "recall": 0.868421052631579,
+        "f1-score": 0.9166666666666667,
+        "support": 38.0
+    },
+    "please": {
+        "precision": 0.8888888888888888,
+        "recall": 0.96,
+        "f1-score": 0.923076923076923,
+        "support": 25.0
+    },
+    "police": {
+        "precision": 0.9807692307692307,
+        "recall": 1.0,
+        "f1-score": 0.9902912621359222,
+        "support": 51.0
+    },
+    "practice": {
+        "precision": 0.8928571428571429,
+        "recall": 0.78125,
+        "f1-score": 0.8333333333333334,
+        "support": 32.0
+    },
+    "president": {
+        "precision": 0.972972972972973,
+        "recall": 0.972972972972973,
+        "f1-score": 0.972972972972973,
+        "support": 37.0
+    },
+    "problem": {
+        "precision": 0.9310344827586207,
+        "recall": 1.0,
+        "f1-score": 0.9642857142857143,
+        "support": 27.0
+    },
+    "pull": {
+        "precision": 1.0,
+        "recall": 0.9333333333333333,
+        "f1-score": 0.9655172413793104,
+        "support": 45.0
+    },
+    "purple": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 40.0
+    },
+    "rabbit": {
+        "precision": 1.0,
+        "recall": 0.9259259259259259,
+        "f1-score": 0.9615384615384615,
+        "support": 27.0
+    },
+    "read": {
+        "precision": 0.9444444444444444,
+        "recall": 0.9714285714285714,
+        "f1-score": 0.9577464788732395,
+        "support": 35.0
+    },
+    "red": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 43.0
+    },
+    "remember": {
+        "precision": 0.8913043478260869,
+        "recall": 1.0,
+        "f1-score": 0.9425287356321839,
+        "support": 41.0
+    },
+    "restaurant": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+    },
+    "ride": {
+        "precision": 1.0,
+        "recall": 0.9428571428571428,
+        "f1-score": 0.9705882352941176,
+        "support": 35.0
+    },
+    "right": {
+        "precision": 0.972972972972973,
+        "recall": 0.972972972972973,
+        "f1-score": 0.972972972972973,
+        "support": 37.0
+    },
+    "room": {
+        "precision": 0.9512195121951219,
+        "recall": 0.975,
+        "f1-score": 0.9629629629629629,
+        "support": 40.0
+    },
+    "run": {
+        "precision": 0.9,
+        "recall": 0.8709677419354839,
+        "f1-score": 0.8852459016393444,
+        "support": 31.0
+    },
+    "russia": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 37.0
+    },
+    "salt": {
+        "precision": 1.0,
+        "recall": 0.9574468085106383,
+        "f1-score": 0.9782608695652174,
+        "support": 47.0
+    },
+    "same": {
+        "precision": 0.9428571428571428,
+        "recall": 1.0,
+        "f1-score": 0.9705882352941176,
+        "support": 33.0
+    },
+    "sandwich": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 40.0
+    },
+    "school": {
+        "precision": 0.9347826086956522,
+        "recall": 0.9555555555555556,
+        "f1-score": 0.945054945054945,
+        "support": 45.0
+    },
+    "secretary": {
+        "precision": 0.9811320754716981,
+        "recall": 0.9285714285714286,
+        "f1-score": 0.9541284403669724,
+        "support": 56.0
+    },
+    "share": {
+        "precision": 0.926829268292683,
+        "recall": 1.0,
+        "f1-score": 0.9620253164556963,
+        "support": 38.0
+    },
+    "shirt": {
+        "precision": 0.9148936170212766,
+        "recall": 0.9148936170212766,
+        "f1-score": 0.9148936170212766,
+        "support": 47.0
+    },
+    "short": {
+        "precision": 0.975609756097561,
+        "recall": 0.851063829787234,
+        "f1-score": 0.9090909090909092,
+        "support": 47.0
+    },
+    "show": {
+        "precision": 1.0,
+        "recall": 0.9375,
+        "f1-score": 0.967741935483871,
+        "support": 32.0
+    },
+    "sick": {
+        "precision": 0.9487179487179487,
+        "recall": 0.9736842105263158,
+        "f1-score": 0.9610389610389611,
+        "support": 38.0
+    },
+    "sign": {
+        "precision": 1.0,
+        "recall": 0.9696969696969697,
+        "f1-score": 0.9846153846153847,
+        "support": 33.0
+    },
+    "since": {
+        "precision": 0.9285714285714286,
+        "recall": 0.975,
+        "f1-score": 0.951219512195122,
+        "support": 40.0
+    },
+    "small": {
+        "precision": 1.0,
+        "recall": 0.8181818181818182,
+        "f1-score": 0.9,
+        "support": 33.0
+    },
+    "snow": {
+        "precision": 1.0,
+        "recall": 0.9230769230769231,
+        "f1-score": 0.9600000000000001,
+        "support": 39.0
+    },
+    "some": {
+        "precision": 1.0,
+        "recall": 0.9142857142857143,
+        "f1-score": 0.955223880597015,
+        "support": 35.0
+    },
+    "son": {
+        "precision": 0.9523809523809523,
+        "recall": 0.975609756097561,
+        "f1-score": 0.963855421686747,
+        "support": 41.0
+    },
+    "soon": {
+        "precision": 0.9090909090909091,
+        "recall": 1.0,
+        "f1-score": 0.9523809523809523,
+        "support": 40.0
+    },
+    "south": {
+        "precision": 0.9473684210526315,
+        "recall": 1.0,
+        "f1-score": 0.972972972972973,
+        "support": 36.0
+    },
+    "stay": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 36.0
+    },
+    "student": {
+        "precision": 0.8157894736842105,
+        "recall": 0.96875,
+        "f1-score": 0.8857142857142857,
+        "support": 32.0
+    },
+    "study": {
+        "precision": 1.0,
+        "recall": 0.9387755102040817,
+        "f1-score": 0.968421052631579,
+        "support": 49.0
+    },
+    "sunday": {
+        "precision": 0.975,
+        "recall": 0.975,
+        "f1-score": 0.975,
+        "support": 40.0
+    },
+    "table": {
+        "precision": 0.9411764705882353,
+        "recall": 0.9696969696969697,
+        "f1-score": 0.955223880597015,
+        "support": 33.0
+    },
+    "take": {
+        "precision": 0.8888888888888888,
+        "recall": 1.0,
+        "f1-score": 0.9411764705882353,
+        "support": 32.0
+    },
+    "tall": {
+        "precision": 0.9736842105263158,
+        "recall": 0.8809523809523809,
+        "f1-score": 0.925,
+        "support": 42.0
+    },
+    "tea": {
+        "precision": 0.972972972972973,
+        "recall": 0.9,
+        "f1-score": 0.935064935064935,
+        "support": 40.0
+    },
+    "teach": {
+        "precision": 0.9565217391304348,
+        "recall": 0.8627450980392157,
+        "f1-score": 0.9072164948453608,
+        "support": 51.0
+    },
+    "teacher": {
+        "precision": 0.9705882352941176,
+        "recall": 0.9166666666666666,
+        "f1-score": 0.9428571428571428,
+        "support": 36.0
+    },
+    "tell": {
+        "precision": 1.0,
+        "recall": 0.9459459459459459,
+        "f1-score": 0.9722222222222222,
+        "support": 37.0
+    },
+    "test": {
+        "precision": 0.9310344827586207,
+        "recall": 1.0,
+        "f1-score": 0.9642857142857143,
+        "support": 27.0
+    },
+    "thanksgiving": {
+        "precision": 0.9111111111111111,
+        "recall": 0.9534883720930233,
+        "f1-score": 0.9318181818181819,
+        "support": 43.0
+    },
+    "theory": {
+        "precision": 0.9565217391304348,
+        "recall": 1.0,
+        "f1-score": 0.9777777777777777,
+        "support": 22.0
+    },
+    "thin": {
+        "precision": 0.9821428571428571,
+        "recall": 0.9482758620689655,
+        "f1-score": 0.9649122807017544,
+        "support": 58.0
+    },
+    "thursday": {
+        "precision": 1.0,
+        "recall": 0.9705882352941176,
+        "f1-score": 0.9850746268656716,
+        "support": 34.0
+    },
+    "time": {
+        "precision": 0.975609756097561,
+        "recall": 0.975609756097561,
+        "f1-score": 0.975609756097561,
+        "support": 41.0
+    },
+    "tired": {
+        "precision": 0.9512195121951219,
+        "recall": 0.9512195121951219,
+        "f1-score": 0.9512195121951219,
+        "support": 41.0
+    },
+    "tomato": {
+        "precision": 0.9090909090909091,
+        "recall": 0.9523809523809523,
+        "f1-score": 0.9302325581395349,
+        "support": 21.0
+    },
+    "trade": {
+        "precision": 1.0,
+        "recall": 0.9487179487179487,
+        "f1-score": 0.9736842105263158,
+        "support": 39.0
+    },
+    "train": {
+        "precision": 0.7272727272727273,
+        "recall": 0.7741935483870968,
+        "f1-score": 0.7500000000000001,
+        "support": 31.0
+    },
+    "travel": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 45.0
+    },
+    "ugly": {
+        "precision": 0.9473684210526315,
+        "recall": 0.972972972972973,
+        "f1-score": 0.9599999999999999,
+        "support": 37.0
+    },
+    "visit": {
+        "precision": 0.9512195121951219,
+        "recall": 0.8863636363636364,
+        "f1-score": 0.9176470588235294,
+        "support": 44.0
+    },
+    "wait": {
+        "precision": 1.0,
+        "recall": 0.9583333333333334,
+        "f1-score": 0.9787234042553191,
+        "support": 48.0
+    },
+    "walk": {
+        "precision": 1.0,
+        "recall": 0.9714285714285714,
+        "f1-score": 0.9855072463768115,
+        "support": 35.0
+    },
+    "want": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 41.0
+    },
+    "war": {
+        "precision": 1.0,
+        "recall": 0.9459459459459459,
+        "f1-score": 0.9722222222222222,
+        "support": 37.0
+    },
+    "water": {
+        "precision": 1.0,
+        "recall": 0.96875,
+        "f1-score": 0.9841269841269841,
+        "support": 32.0
+    },
+    "week": {
+        "precision": 0.8636363636363636,
+        "recall": 1.0,
+        "f1-score": 0.9268292682926829,
+        "support": 38.0
+    },
+    "what": {
+        "precision": 0.9512195121951219,
+        "recall": 0.975,
+        "f1-score": 0.9629629629629629,
+        "support": 40.0
+    },
+    "where": {
+        "precision": 1.0,
+        "recall": 0.96875,
+        "f1-score": 0.9841269841269841,
+        "support": 32.0
+    },
+    "white": {
+        "precision": 1.0,
+        "recall": 0.9583333333333334,
+        "f1-score": 0.9787234042553191,
+        "support": 48.0
+    },
+    "who": {
+        "precision": 0.9818181818181818,
+        "recall": 0.9818181818181818,
+        "f1-score": 0.9818181818181818,
+        "support": 55.0
+    },
+    "why": {
+        "precision": 0.9736842105263158,
+        "recall": 0.9736842105263158,
+        "f1-score": 0.9736842105263158,
+        "support": 38.0
+    },
+    "wife": {
+        "precision": 0.9523809523809523,
+        "recall": 0.9523809523809523,
+        "f1-score": 0.9523809523809523,
+        "support": 42.0
+    },
+    "window": {
+        "precision": 0.9666666666666667,
+        "recall": 1.0,
+        "f1-score": 0.983050847457627,
+        "support": 29.0
+    },
+    "with": {
+        "precision": 0.967741935483871,
+        "recall": 0.9375,
+        "f1-score": 0.9523809523809523,
+        "support": 32.0
+    },
+    "woman": {
+        "precision": 0.94,
+        "recall": 0.94,
+        "f1-score": 0.94,
+        "support": 50.0
+    },
+    "work": {
+        "precision": 0.95,
+        "recall": 0.95,
+        "f1-score": 0.9500000000000001,
+        "support": 40.0
+    },
+    "write": {
+        "precision": 0.9347826086956522,
+        "recall": 0.9555555555555556,
+        "f1-score": 0.945054945054945,
+        "support": 45.0
+    },
+    "wrong": {
+        "precision": 0.4473684210526316,
+        "recall": 1.0,
+        "f1-score": 0.6181818181818182,
+        "support": 51.0
+    },
+    "year": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 42.0
+    },
+    "yellow": {
+        "precision": 0.9696969696969697,
+        "recall": 0.9411764705882353,
+        "f1-score": 0.955223880597015,
+        "support": 34.0
+    },
+    "yes": {
+        "precision": 0.9795918367346939,
+        "recall": 0.9795918367346939,
+        "f1-score": 0.9795918367346939,
+        "support": 49.0
+    },
+    "yesterday": {
+        "precision": 0.9722222222222222,
+        "recall": 1.0,
+        "f1-score": 0.9859154929577464,
+        "support": 35.0
+    },
+    "you": {
+        "precision": 0.9555555555555556,
+        "recall": 1.0,
+        "f1-score": 0.9772727272727273,
+        "support": 43.0
+    },
+    "your": {
+        "precision": 1.0,
+        "recall": 0.896551724137931,
+        "f1-score": 0.9454545454545454,
+        "support": 29.0
+    },
+    "accuracy": 0.9566946531153336,
+    "macro avg": {
+        "precision": 0.9611785164480092,
+        "recall": 0.9562323158033741,
+        "f1-score": 0.9574597953395958,
+        "support": 11315.0
+    },
+    "weighted avg": {
+        "precision": 0.9612988427462262,
+        "recall": 0.9566946531153336,
+        "f1-score": 0.9576548919880936,
+        "support": 11315.0
+    }
+}
