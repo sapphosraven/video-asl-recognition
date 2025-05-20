@@ -1,0 +1,26 @@
+# Core libraries
+numpy>=1.19.0
+opencv-python>=4.5.0
+torch>=1.9.0
+torchvision>=0.10.0
+
+# Pose estimation
+mediapipe>=0.8.9
+
+# Optional: for OpenPose (comment out if using MediaPipe)
+# python-openpose>=0.1.0
+
+# Data processing
+pandas>=1.3.0
+scikit-learn>=0.24.0
+
+# Visualization
+matplotlib>=3.4.0
+seaborn>=0.11.0
+
+# Utilities
+tqdm>=4.62.0
+pillow>=8.3.0
+
+# Optional: for real-time UI
+# streamlit>=1.0.0
