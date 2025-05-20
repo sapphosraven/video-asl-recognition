@@ -23,15 +23,9 @@ DATA_DIR = Path(r'f:\Uni_Stuff\6th_Sem\DL\Proj\video-asl-recognition\pose_estima
 OUTPUT_DIR = Path(r'f:\Uni_Stuff\6th_Sem\DL\Proj\video-asl-recognition\pose_estimation\data\keypoints')
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-def standardize_sequence_length(keypoints, target_length=16):
-    if len(keypoints) == 1:
-        return None
-    if len(keypoints) > target_length:
-        indices = np.linspace(0, len(keypoints) - 1, target_length, dtype=int)
-        keypoints = [keypoints[i] for i in indices]
-    elif len(keypoints) < target_length:
-        keypoints += [keypoints[-1]] * (target_length - len(keypoints))
-    return keypoints
+NUM_POSE = 33
+NUM_HAND = 21
+TOTAL_NODES = NUM_POSE + 2 * NUM_HAND  # 75
 
 def process_instance(instance_dir, label):
     images = sorted(instance_dir.glob('*.jpg'))
@@ -42,7 +36,7 @@ def process_instance(instance_dir, label):
     hands_detector = mp_hands.Hands(static_image_mode=True, max_num_hands=2, min_detection_confidence=0.5)
     pose_detector = mp_pose.Pose(static_image_mode=True, min_detection_confidence=0.5)
 
-    keypoints = []
+    all_nodes = []
     for img_path in images:
         frame = cv2.imread(str(img_path))
         if frame is None:
@@ -52,36 +46,31 @@ def process_instance(instance_dir, label):
         hand_results = hands_detector.process(frame_rgb)
         pose_results = pose_detector.process(frame_rgb)
 
-        frame_keypoints = {}
-        if hand_results.multi_hand_landmarks:
-            frame_keypoints['hands'] = []
-            for hand_landmarks in hand_results.multi_hand_landmarks:
-                hand_points = [[lm.x, lm.y, lm.z] for lm in hand_landmarks.landmark]
-                frame_keypoints['hands'].append(hand_points)
-
+        nodes = np.zeros((TOTAL_NODES, 3), dtype=np.float32)
+        # fill pose landmarks
         if pose_results.pose_landmarks:
-            frame_keypoints['pose'] = [[lm.x, lm.y, lm.z] for lm in pose_results.pose_landmarks.landmark]
-
-        keypoints.append(frame_keypoints)
+            for i, lm in enumerate(pose_results.pose_landmarks.landmark):
+                nodes[i] = [lm.x, lm.y, lm.z]
+        # fill hand landmarks
+        if hand_results.multi_hand_landmarks:
+            for h_i, hand_landmarks in enumerate(hand_results.multi_hand_landmarks):
+                offset = NUM_POSE + h_i * NUM_HAND
+                for j, lm in enumerate(hand_landmarks.landmark):
+                    nodes[offset + j] = [lm.x, lm.y, lm.z]
+        all_nodes.append(nodes.tolist())
 
     hands_detector.close()
     pose_detector.close()
 
-    keypoints = standardize_sequence_length(keypoints)
-    if keypoints is None:
-        print(f"Skipping {instance_dir} after standardization.")
-        return
-
-    output_path = OUTPUT_DIR / label / f"{instance_dir.name}_keypoints.json"
+    # save full sequence in compressed NPZ instead of JSON
+    output_path = OUTPUT_DIR / label / f"{instance_dir.name}_keypoints.npz"
     output_path.parent.mkdir(parents=True, exist_ok=True)
-
-    with open(output_path, 'w') as f:
-        json.dump({
-            "label": label,
-            "instance": instance_dir.name,
-            "keypoints": keypoints
-        }, f)
-
+    np.savez_compressed(
+        str(output_path),
+        nodes=np.array(all_nodes, dtype=np.float32),
+        label=label,
+        instance=instance_dir.name
+    )
     print(f"Saved {output_path}")
 
 def main():
