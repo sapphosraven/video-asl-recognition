@@ -1,0 +1,5 @@
+/pose_estimation/data
+*.pyc
+*.pt
+*.pth
+/pose_estimation/wlasl_repo
