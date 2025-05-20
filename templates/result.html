@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Transcription Result</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <style>
+      .video-thumbnail {
+        width: 180px;
+        margin: 10px;
+        border-radius: 5px;
+      }
+      .word-clip-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+      }
+      .clip-info {
+        flex: 1;
+        margin-left: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h1>ASL Recognition Result</h1>
+
+      <div class="alert alert-success mt-4">
+        <strong>Transcribed Sentence:</strong> {{ sentence }}
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">Detected Sign Segments</h4>
+        </div>
+        <div class="card-body">
+          <p class="text-muted">
+            Using WLASL-style segmentation, we identified {{ clips|length }}
+            word segments in your video.
+          </p>
+
+          {% for clip, word in zip(clips, raw_words) %}
+          <div class="word-clip-row">
+            <video class="video-thumbnail" controls>
+              <source src="/{{ clip }}" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div class="clip-info">
+              <h5>Word: <span class="badge bg-success">{{ word }}</span></h5>
+              <p class="mb-0">
+                <small class="text-muted"
+                  >Clip: {{ clip.split('/')[-1] }}</small
+                >
+              </p>
+              <p>
+                <small class="text-muted">
+                  {% set segments = clip.split('/')[-1].split('_') %} {% if
+                  segments|length > 2 %} Frames: {{ segments[-2] }} to {{
+                  segments[-1].replace('.mp4', '') }} {% endif %}
+                </small>
+              </p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <a href="/" class="btn btn-primary mt-4">Transcribe Another Video</a>
+      <button
+        class="btn btn-outline-secondary mt-4 ms-2"
+        onclick="window.history.back()"
+      >
+        Go Back
+      </button>
+    </div>
+    <!-- The zip function is now provided by Flask directly to the template -->
+    <script>
+      // Any other JavaScript can go here
+    </script>
+  </body>
+</html>
