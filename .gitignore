@@ -2,3 +2,6 @@ WLASL/
 pose_estimation/data/raw_videos_mp4/00624.mp4
 /pose_estimation/data
 /pose_estimation/wlasl_repo
+*.pt
+*.pth
+*.pyc
