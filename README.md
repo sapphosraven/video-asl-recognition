@@ -28,3 +28,4 @@ This project implements a deep learning-based American Sign Language (ASL) recog
 - MediaPipe/OpenPose for pose estimation
 - PyTorch/TensorFlow for deep learning models
 - Python for implementation and data processing
+# video-asl-recognition

@@ -1,0 +1,23 @@
+### Documentation for Progress So Far
+
+#### 1. **Project Setup**
+
+- **Git Setup**: Initialized a GitHub repository and created a separate branch for the sentence reconstruction module in collaboration with team members.
+- **Clone WLASL**: Successfully cloned the WLASL repository to get access to dataset files and preprocessing scripts.
+
+#### 2. **Dataset Preprocessing**
+
+- **Downloading Data**: Implemented a script to download and preprocess WLASL data (specifically focusing on subsets like WLASL100).
+- **Folder Setup**: The project folder structure has been adjusted to match the necessary paths for preprocessing and model integration.
+- **Parsing JSON**: Loaded and parsed WLASL JSON files to extract ASL-style and English word pairs.
+
+#### 3. **Model and Preprocessing Preparation**
+
+- **PyTorch Setup**: Installed PyTorch and ensured compatibility for model training and inference.
+- **Data Tokenization**: Started setting up preprocessing steps like tokenization for ASL and English sentences to create suitable inputs for a Seq2Seq model or rule-based system.
+
+#### Next Steps:
+- **Data Preprocessing Completion**: Finalize tokenization and sequence handling.
+- **Start Sentence Reconstruction**: Develop the sentence generation model using either a rule-based or seq2seq approach.
+
+This documentation captures the progress and foundational steps taken to set up the project for sentence reconstruction from ASL sequences.
