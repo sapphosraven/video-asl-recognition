@@ -6,6 +6,8 @@ import numpy as np
 from pathlib import Path
 import json
 import os
+from PIL import Image
+import logging
 
 # --- Model definition (should match the one used in training) ---
 class ASLWordCNN(nn.Module):
@@ -37,7 +39,7 @@ def load_cnn_model(model_path, num_classes=300, device=None):
 
 # --- Preprocessing ---
 def preprocess_clip(clip_path, num_frames=16, size=(240,240), use_middle_frame=True):
-    """Load video, sample frames, resize, normalize for CNN input. Use middle frame by default."""
+    """Load video, sample frames, resize via PIL, normalize for CNN input."""
     cap = cv2.VideoCapture(str(clip_path))
     total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     idxs = np.linspace(0, max(0, total-1), num_frames, dtype=int)
@@ -47,23 +49,24 @@ def preprocess_clip(clip_path, num_frames=16, size=(240,240), use_middle_frame=T
         ret, frame = cap.read()
         if not ret:
             continue
-        img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        img = cv2.resize(img, size)
+        # Convert BGR to RGB and use PIL for resizing
+        rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        pil_img = Image.fromarray(rgb)
+        pil_img = pil_img.resize(size, Image.BILINEAR)
+        img = np.array(pil_img)
         frames.append(img)
     cap.release()
     if not frames:
         raise ValueError(f"No frames extracted from {clip_path}")
     x = np.stack(frames, axis=0)  # (T, H, W, C)
     x = x.astype(np.float32) / 255.0
-    x = (x - [0.485, 0.456, 0.406]) / [0.229, 0.224, 0.225]  # ImageNet stats
+    x = (x - [0.485, 0.456, 0.406]) / [0.229, 0.224, 0.225]
     x = torch.tensor(x).permute(0,3,1,2)  # (T, C, H, W)
     if use_middle_frame:
-        # Use the middle frame only
         mid = x.shape[0] // 2
         x = x[mid:mid+1]
     else:
-        # Average pool over time (legacy behavior)
-        x = x.mean(dim=0, keepdim=True)
+        x = x  # keep all frames for ensemble
     return x.float()
 
 # --- Inference ---
@@ -76,7 +79,7 @@ if os.path.exists(CLASS_MAP_PATH):
 else:
     idx_to_class = None
 
-def predict_word_from_clip(model, clip_path, idx_to_class=idx_to_class, min_confidence=0.4, use_middle_frame=True):
+def predict_word_from_clip(model, clip_path, idx_to_class=idx_to_class, min_confidence=0.25, use_middle_frame=True):
     """
     Predict the word label for a video clip with confidence check.
     
@@ -90,7 +93,6 @@ def predict_word_from_clip(model, clip_path, idx_to_class=idx_to_class, min_conf
     Returns:
         String containing the predicted word or "unknown" if confidence is too low
     """
-    import logging
     logger = logging.getLogger(__name__)
     
     try:
@@ -127,4 +129,43 @@ def predict_word_from_clip(model, clip_path, idx_to_class=idx_to_class, min_conf
             
     except Exception as e:
         logger.error(f"Error predicting word from clip {clip_path}: {str(e)}")
+        return "unknown"
+
+def predict_word_from_clip_ensemble(model, clip_path, idx_to_class=idx_to_class, min_confidence=0.2, temperature=2.0):
+    """Predict word by averaging logits over all frames with temperature scaling."""
+    logger = logging.getLogger(__name__)
+    try:
+        # Preprocess to get all frames
+        x = preprocess_clip(clip_path, use_middle_frame=False)  # (T, C, H, W)
+        device = next(model.parameters()).device
+        with torch.no_grad():
+            logits = model(x.to(device))  # shape (T, C)
+            logits_mean = logits.mean(dim=0, keepdim=True)  # (1, C)
+            
+            # Apply temperature scaling to calibrate confidence
+            scaled_logits = logits_mean / temperature
+            probs = torch.nn.functional.softmax(scaled_logits, dim=1)[0]
+            
+            # Log top predictions for debugging
+            top_probs, top_indices = torch.topk(probs, 3)
+            logger.info(f"Top predictions for {clip_path} (temp={temperature}):")
+            for i, (prob, idx) in enumerate(zip(top_probs, top_indices)):
+                word = idx_to_class.get(str(idx.item()), str(idx.item())) if idx_to_class else str(idx.item())
+                logger.info(f"  {i+1}. {word}: {prob.item()*100:.2f}%")
+            
+            if probs.std().item() < 0.01:
+                logger.warning(f"Low discrimination for {clip_path} (std={probs.std().item():.5f})")
+                return "unknown"
+            confidence, pred_idx = torch.max(probs, dim=0)
+            if confidence.item() < min_confidence:
+                logger.warning(f"Low confidence {confidence.item()*100:.2f}% for {clip_path}")
+                return "unknown"
+            pred = pred_idx.item()
+            if idx_to_class:
+                predicted_word = idx_to_class.get(str(pred), idx_to_class.get(pred, "unknown"))
+                logger.info(f"Final prediction for {clip_path}: {predicted_word} ({confidence.item()*100:.2f}%)")
+                return predicted_word
+            return str(pred)
+    except Exception as e:
+        logger.error(f"Error ensemble predicting {clip_path}: {e}")
         return "unknown"

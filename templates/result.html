@@ -49,7 +49,10 @@
           {% for clip, word in zip(clips, raw_words) %}
           <div class="word-clip-row">
             <video class="video-thumbnail" controls>
-              <source src="/{{ clip }}" type="video/mp4" />
+              <source
+                src="/uploads/{{ clip.split('/')[-1] }}"
+                type="video/mp4"
+              />
               Your browser does not support the video tag.
             </video>
             <div class="clip-info">

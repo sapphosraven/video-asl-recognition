@@ -199,9 +199,7 @@ def predict_word(clip_path: str) -> str:
         logger.warning(f"No model available, returning placeholder for {clip_path}")
         return "unknown"
     try:
-        from wordlevelrecogntion.inference import preprocess_clip, predict_word_from_clip
-        # Use the middle frame for prediction (recommended)
-        word = predict_word_from_clip(cnn_model, clip_path, use_middle_frame=True)
+        word = predict_word_from_clip(cnn_model, clip_path, min_confidence=0.25)
         return word
     except Exception as e:
         logger.error(f"Error in prediction: {e}")
