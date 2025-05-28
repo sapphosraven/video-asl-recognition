@@ -1,0 +1,26 @@
+{
+  "word_to_idx": {
+    "drink": 0,
+    "computer": 1,
+    "before": 2,
+    "go": 3,
+    "like": 4,
+    "mother": 5,
+    "thin": 6,
+    "cousin": 7,
+    "hot": 8,
+    "no": 9
+  },
+  "idx_to_word": {
+    "0": "drink",
+    "1": "computer",
+    "2": "before",
+    "3": "go",
+    "4": "like",
+    "5": "mother",
+    "6": "thin",
+    "7": "cousin",
+    "8": "hot",
+    "9": "no"
+  }
+}
