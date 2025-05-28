@@ -33,10 +33,17 @@ class ImprovedPoseNormalizer:
         self.LEFT_HIP_IDX = 23
         self.RIGHT_HIP_IDX = 24
         
-        # Hand keypoint ranges
+        # MediaPipe keypoint constants for 553-node architecture
+        self.NUM_POSE = 33
+        self.NUM_HAND = 21  
+        self.NUM_FACE = 478  # MediaPipe face mesh provides 478 landmarks
+        self.TOTAL_NODES = self.NUM_POSE + 2 * self.NUM_HAND + self.NUM_FACE  # 553
+        
+        # Keypoint ranges
         self.POSE_RANGE = range(0, 33)
         self.LEFT_HAND_RANGE = range(33, 54)  
         self.RIGHT_HAND_RANGE = range(54, 75)
+        self.FACE_RANGE = range(75, 553)  # Face landmarks start at index 75
         
     def calculate_body_center(self, pose_keypoints):
         """Calculate body center from shoulders and hips for anchoring"""
@@ -316,18 +323,18 @@ def create_improved_pose_dataset_class():
                 
             except Exception as e:
                 print(f"Error loading {file_path}: {e}")
-                # Return zero tensor as fallback
-                zero_keypoints = torch.zeros((self.max_seq_len, 75, 3), dtype=torch.float32)
+                # Return zero tensor as fallback (updated for 553 nodes)
+                zero_keypoints = torch.zeros((self.max_seq_len, 553, 3), dtype=torch.float32)
                 return zero_keypoints, torch.tensor(label, dtype=torch.long)
     
     return ImprovedPoseSequenceDataset
 
 def create_improved_graph_connectivity():
-    """Create improved graph connectivity based on anatomical and functional relationships"""
+    """Create improved graph connectivity for 553 nodes (pose + hands + face)"""
     
-    # MediaPipe keypoint indices
-    NUM_POSE, NUM_HAND = 33, 21
-    TOTAL_NODES = NUM_POSE + 2 * NUM_HAND
+    # MediaPipe keypoint indices for 553-node architecture
+    NUM_POSE, NUM_HAND, NUM_FACE = 33, 21, 478
+    TOTAL_NODES = NUM_POSE + 2 * NUM_HAND + NUM_FACE  # 553
     
     # Import MediaPipe connections
     from mediapipe.python.solutions import pose_connections, hands_connections
@@ -373,27 +380,38 @@ def create_improved_graph_connectivity():
         edges.add((left_idx, right_idx))
         edges.add((right_idx, left_idx))
     
-    # 4. IMPROVED: Add facial connections to hands (for expressive signs)
+    # 4. IMPROVED: Add face-to-hands connections (75-552 face landmarks)
     NOSE = 0
     LEFT_EYE = 2
     RIGHT_EYE = 5
+    
+    # Key face landmarks for ASL (mouth, eyes, eyebrows)
+    FACE_KEY_POINTS = [75, 76, 77, 78, 79, 80]  # First few face landmarks
     
     # Connect face to hand centers for expressive signing
     LEFT_HAND_CENTER = NUM_POSE + 9   # Middle finger MCP
     RIGHT_HAND_CENTER = NUM_POSE + NUM_HAND + 9
     
+    # Face-pose connections
     for face_point in [NOSE, LEFT_EYE, RIGHT_EYE]:
         edges.add((face_point, LEFT_HAND_CENTER))
         edges.add((LEFT_HAND_CENTER, face_point))
         edges.add((face_point, RIGHT_HAND_CENTER))
         edges.add((RIGHT_HAND_CENTER, face_point))
     
+    # Face landmark internal connectivity (simplified)
+    face_offset = NUM_POSE + 2 * NUM_HAND  # 75
+    for i in range(0, NUM_FACE - 1, 10):  # Connect every 10th face landmark
+        if i + 1 < NUM_FACE:
+            edges.add((face_offset + i, face_offset + i + 1))
+            edges.add((face_offset + i + 1, face_offset + i))
+    
     # Convert to PyTorch Geometric format
     edge_list = list(edges)
     edge_index = torch.tensor(edge_list, dtype=torch.long).t().contiguous()
     
     print(f"IMPROVED Graph: {TOTAL_NODES} nodes, {len(edge_list)} edges")
-    print(f"Added {len(edge_list) - len(POSE_CONNECTIONS)*2 - len(HAND_CONNECTIONS)*4} additional connections")
+    print(f"Added face landmarks and enhanced connectivity for ASL recognition")
     
     return edge_index
 
@@ -456,3 +474,4 @@ def apply_temporal_augmentation(keypoints, speed_range=0.2):
 print("🚀 Improved normalization and preprocessing module loaded!")
 print("📚 Based on successful TGCN implementations achieving 87.60% on WLASL-100")
 print("✨ Features: spatial anchoring, temporal smoothing, improved graph connectivity")
+print(f"📊 Supporting 553-node architecture: 33 pose + 42 hands + 478 face landmarks")
