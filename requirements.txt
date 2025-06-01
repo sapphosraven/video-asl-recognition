@@ -24,3 +24,24 @@ pillow>=8.3.0
 
 # Optional: for real-time UI
 # streamlit>=1.0.0
+
+# OpenHands T-GCN for pose-based inference
+git+https://github.com/AI4Bharat/OpenHands.git@main#egg=OpenHands
+torch-geometric
+
+# Web scraping for sentence reconstruction
+requests>=2.25.0
+beautifulsoup4>=4.9.0
+
+# Transformer models
+transformers>=4.0.0
+datasets>=1.0.0
+
+# Natural language processing
+spacy>=3.0.0
+
+# Web framework
+flask>=2.0.0
+
+# Additional scientific computing
+scipy>=1.7.0

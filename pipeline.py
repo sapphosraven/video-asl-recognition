@@ -1,6 +1,19 @@
 import os
 import cv2
+import torch
+import numpy as np
 from typing import List
+import logging
+from pose_inference import load_pose_model, predict_word_from_pose
+from wordlevelrecogntion.inference import load_cnn_model, predict_word_from_clip
+
+# Configure logger
+logger = logging.getLogger(__name__)
+
+# Load models
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+pose_model = load_pose_model(device=device)
+cnn_model = load_cnn_model('wordlevelrecogntion/asl_recognition_final_20250518_132050.pth')
 
 # --- Step 1: Video segmentation ---
 # REPLACED: Basic motion detection → Enhanced WLASL-style segmentation
@@ -142,165 +155,77 @@ def split_into_clips(video_path: str) -> List[str]:
     
     return clip_paths
 
-# --- Step 2: Word recognition ---
-from wordlevelrecogntion.inference import load_cnn_model, predict_word_from_clip
-import logging
-
-# Modified to add more logging and load from torchscript model which is more reliable
-def load_recognition_model():
-    """Load the word recognition model with proper error handling and logging"""
-    logger = logging.getLogger(__name__)
-    
-    # First try the torchscript model which is more reliable for inference
-    torchscript_path = 'wordlevelrecogntion/asl_torchscript_20250518_132050.pt'
-    pth_path = 'wordlevelrecogntion/asl_recognition_final_20250518_132050.pth'
-    
-    try:
-        import torch
-        if torch.cuda.is_available():
-            logger.info("CUDA is available, using GPU for word recognition")
-        else:
-            logger.info("CUDA not available, using CPU for word recognition")
-        
-        if os.path.exists(torchscript_path):
-            logger.info(f"Loading TorchScript model from {torchscript_path}")
-            try:
-                model = torch.jit.load(torchscript_path)
-                logger.info("Successfully loaded TorchScript model")
-                return model
-            except Exception as e:
-                logger.warning(f"Failed to load TorchScript model: {e}")
-        
-        # Fall back to regular model if TorchScript fails
-        logger.info(f"Loading regular PyTorch model from {pth_path}")
-        model = load_cnn_model(pth_path)
-        logger.info("Successfully loaded PyTorch model")
-        return model
-    except Exception as e:
-        logger.error(f"Failed to load word recognition model: {e}")
-        raise
-
-# Load model with better error handling
-try:
-    cnn_model = load_recognition_model()
-except Exception as e:
-    import sys
-    print(f"CRITICAL ERROR: Could not load word recognition model: {e}")
-    print("Falling back to placeholder prediction function")
-    cnn_model = None
-
 def predict_word(clip_path: str) -> str:
-    """
-    Predicts the signed word in the given video clip using the CNN model.
-    Added error handling and confidence threshold.
-    """
     logger = logging.getLogger(__name__)
-    if cnn_model is None:
-        logger.warning(f"No model available, returning placeholder for {clip_path}")
-        return "unknown"
+    clip_keypoints_path = clip_path.replace(".mp4", "_keypoints.npz")
+    if os.path.exists(clip_keypoints_path):
+        try:
+            arr = np.load(clip_keypoints_path)["arr_0"]
+            word = predict_word_from_pose(pose_model, arr, device=device)
+            return word
+        except Exception as e:
+            logger.warning(f"Pose-based inference failed: {e}. Falling back to CNN.")
+    # Fallback to CNN-based prediction
     try:
         word = predict_word_from_clip(cnn_model, clip_path, min_confidence=0.25)
         return word
     except Exception as e:
-        logger.error(f"Error in prediction: {e}")
+        logger.error(f"Error in CNN prediction: {e}")
         return "unknown"
 
-# --- Step 3: NLP post-processing ---
-def flesh_out_sentence(raw_words: List[str]) -> str:
+# --- Step 3: Sentence reconstruction ---
+def flesh_out_sentence(sign_clips: List[str], pause_duration: int = 500):
     """
-    Takes a list of recognized words and returns a fluent sentence.
-    Placeholder: just joins words for now.
+    Given a list of sign clips, reconstruct the sentence by inserting pauses
+    where necessary based on the analysis of the sign clips.
     """
-    # TODO: Integrate transformer-based language model
-    return ' '.join(raw_words)
+    import moviepy.editor as mpy
+    
+    # Load the sign clips
+    clips = [mpy.VideoFileClip(c) for c in sign_clips]
+    
+    # Calculate durations and decide pauses
+    final_clips = []
+    for i, clip in enumerate(clips):
+        final_clips.append(clip)
+        
+        # Add a pause between signs if not the last sign
+        if i < len(clips) - 1:
+            pause = mpy.ColorClip(size=clip.size, color=(255,255,255), duration=pause_duration/1000)
+            final_clips.append(pause)
+    
+    # Concatenate all clips
+    final_video = mpy.concatenate_videoclips(final_clips, method="compose")
+    
+    return final_video
 
-# --- Full ASL Recognition Pipeline ---
-def process_asl_video(video_path: str) -> dict:
+def process_asl_video(video_path: str):
     """
-    Complete pipeline for ASL recognition:
-    1. Segment the video into clips based on detected word boundaries
-    2. Predict words for each clip
-    3. Convert sequence of words into a fluent sentence
-    
-    Returns a dictionary with the results:
-    {
-        'clips': List of paths to generated clip files,
-        'words': List of recognized words for each clip,
-        'sentence': Complete reconstructed sentence
-    }
+    Main processing function for the ASL video.
+    1. Splits the video into clips containing individual signs.
+    2. For each clip, it predicts the corresponding word in ASL.
+    3. Reconstructs the sentence by combining the sign clips with appropriate pauses.
     """
-    import time
-    import logging
-    
-    logger = logging.getLogger(__name__)
-    
-    # Initialize timing
-    start_time = time.time()
-    
-    # Step 1: Split video into word clips
-    logger.info(f"Segmenting video: {video_path}")
+    # Step 1: Video segmentation
     clip_paths = split_into_clips(video_path)
-    segmentation_time = time.time() - start_time
-    logger.info(f"Segmentation completed in {segmentation_time:.2f}s - Found {len(clip_paths)} clips")
     
-    # Step 2: Recognize words in each clip
-    logger.info("Starting word recognition")
-    word_start_time = time.time()
+    if not clip_paths:
+        logger.warning("No clips found for the given video.")
+        return None
+    
+    # Step 2: Word prediction for each clip
     words = []
-    for i, clip in enumerate(clip_paths):
+    for clip in clip_paths:
         word = predict_word(clip)
         words.append(word)
-        logger.info(f"Clip {i+1}/{len(clip_paths)}: Recognized '{word}'")
-    recognition_time = time.time() - word_start_time
-    logger.info(f"Word recognition completed in {recognition_time:.2f}s")
+        logger.info(f"Predicted word for {clip}: {word}")
     
-    # Step 3: Reconstruct sentence
-    sentence_start_time = time.time()
-    sentence = flesh_out_sentence(words)
-    sentence_time = time.time() - sentence_start_time
-    logger.info(f"Sentence reconstruction completed in {sentence_time:.2f}s")
+    # Step 3: Sentence reconstruction
+    # For now, we just concatenate the words with a space
+    sentence = " ".join(words)
+    logger.info(f"Reconstructed sentence: {sentence}")
     
-    # Prepare results
-    total_time = time.time() - start_time
-    logger.info(f"Total processing time: {total_time:.2f}s")
+    # TODO: Improve sentence reconstruction with proper timing and pauses
+    final_video = flesh_out_sentence(clip_paths)
     
-    return {
-        'clips': clip_paths,
-        'words': words,
-        'sentence': sentence,
-        'timing': {
-            'segmentation': segmentation_time,
-            'recognition': recognition_time,
-            'sentence': sentence_time,
-            'total': total_time
-        }
-    }
-
-# Allow running directly for testing
-if __name__ == "__main__":
-    import sys
-    import logging
-    
-    # Configure logging
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    )
-    
-    # Process command line arguments
-    if len(sys.argv) < 2:
-        print("Usage: python pipeline.py <path_to_video>")
-        sys.exit(1)
-    
-    video_path = sys.argv[1]
-    print(f"Processing video: {video_path}")
-    
-    # Run the pipeline
-    results = process_asl_video(video_path)
-    
-    # Display results
-    print("\n===== RESULTS =====")
-    print(f"Found {len(results['clips'])} word segments")
-    print(f"Recognized words: {results['words']}")
-    print(f"Sentence: {results['sentence']}")
-    print(f"Processing time: {results['timing']['total']:.2f}s")
+    return final_video
