@@ -38,3 +38,4 @@ Progress Tracking:
 Notes:
 - Ensure Windows PowerShell compatibility for any scripts
 - Prioritize minimal working demo over full optimization
+- Try to make as much use of existing code as possible, making as few new files as possible
