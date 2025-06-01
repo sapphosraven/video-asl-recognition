@@ -5,15 +5,18 @@ import numpy as np
 from typing import List
 import logging
 from pose_inference import load_pose_model, predict_word_from_pose
-from wordlevelrecogntion.inference import load_cnn_model, predict_word_from_clip
+from wordlevelrecogntion.inference import load_cnn_model, predict_word_from_clip, predict_word_from_clip_ensemble
 
 # Configure logger
 logger = logging.getLogger(__name__)
 
 # Load models
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-pose_model = load_pose_model(device=device)
-cnn_model = load_cnn_model('wordlevelrecogntion/asl_recognition_final_20250518_132050.pth')
+# Provide checkpoint path for the T-GCN pose model
+checkpoint_path = os.path.join(os.path.dirname(__file__), "OpenHands", "checkpoints", "model_tgcn_wlasl300.pth")
+pose_model = load_pose_model(checkpoint_path=checkpoint_path, device=device)
+# Load CNN model on same device
+cnn_model = load_cnn_model('wordlevelrecogntion/asl_recognition_final_20250518_132050.pth', device=device)
 
 # --- Step 1: Video segmentation ---
 # REPLACED: Basic motion detection → Enhanced WLASL-style segmentation
@@ -167,7 +170,9 @@ def predict_word(clip_path: str) -> str:
             logger.warning(f"Pose-based inference failed: {e}. Falling back to CNN.")
     # Fallback to CNN-based prediction
     try:
-        word = predict_word_from_clip(cnn_model, clip_path, min_confidence=0.25)
+        logger.info(f"Running CNN ensemble inference on {clip_path}")
+        # Use ensemble CNN inference to get top logits over all frames
+        word = predict_word_from_clip_ensemble(cnn_model, clip_path, min_confidence=0.0)
         return word
     except Exception as e:
         logger.error(f"Error in CNN prediction: {e}")
@@ -176,28 +181,10 @@ def predict_word(clip_path: str) -> str:
 # --- Step 3: Sentence reconstruction ---
 def flesh_out_sentence(sign_clips: List[str], pause_duration: int = 500):
     """
-    Given a list of sign clips, reconstruct the sentence by inserting pauses
-    where necessary based on the analysis of the sign clips.
+    Stubbed sentence reconstruction: skip moviepy to avoid extra dependencies.
+    Returns None since we will reconstruct sentences via NLP later.
     """
-    import moviepy.editor as mpy
-    
-    # Load the sign clips
-    clips = [mpy.VideoFileClip(c) for c in sign_clips]
-    
-    # Calculate durations and decide pauses
-    final_clips = []
-    for i, clip in enumerate(clips):
-        final_clips.append(clip)
-        
-        # Add a pause between signs if not the last sign
-        if i < len(clips) - 1:
-            pause = mpy.ColorClip(size=clip.size, color=(255,255,255), duration=pause_duration/1000)
-            final_clips.append(pause)
-    
-    # Concatenate all clips
-    final_video = mpy.concatenate_videoclips(final_clips, method="compose")
-    
-    return final_video
+    return None
 
 def process_asl_video(video_path: str):
     """
@@ -206,26 +193,18 @@ def process_asl_video(video_path: str):
     2. For each clip, it predicts the corresponding word in ASL.
     3. Reconstructs the sentence by combining the sign clips with appropriate pauses.
     """
+    import time
+    start_time = time.time()
     # Step 1: Video segmentation
     clip_paths = split_into_clips(video_path)
-    
-    if not clip_paths:
-        logger.warning("No clips found for the given video.")
-        return None
-    
     # Step 2: Word prediction for each clip
-    words = []
-    for clip in clip_paths:
-        word = predict_word(clip)
-        words.append(word)
-        logger.info(f"Predicted word for {clip}: {word}")
-    
-    # Step 3: Sentence reconstruction
-    # For now, we just concatenate the words with a space
+    words = [predict_word(c) for c in clip_paths]
+    # Reconstruct sentence
     sentence = " ".join(words)
-    logger.info(f"Reconstructed sentence: {sentence}")
-    
-    # TODO: Improve sentence reconstruction with proper timing and pauses
-    final_video = flesh_out_sentence(clip_paths)
-    
-    return final_video
+    total_time = time.time() - start_time
+    return {
+        'timing': {'total': total_time},
+        'clips': clip_paths,
+        'words': words,
+        'sentence': sentence
+    }

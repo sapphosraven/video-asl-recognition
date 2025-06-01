@@ -25,7 +25,7 @@ Tasks To Do:
 9. Update requirements.txt and README.md for dependencies and usage
 
 Progress Tracking:
-- [ ] Task 1
+- [x] Task 1
 - [ ] Task 2
 - [ ] Task 3
 - [ ] Task 4
@@ -38,4 +38,4 @@ Progress Tracking:
 Notes:
 - Ensure Windows PowerShell compatibility for any scripts
 - Prioritize minimal working demo over full optimization
-- Try to make as much use of existing code as possible, making as few new files as possible
+- Try to make as much use of existing code as possible, making as few new files as possible 

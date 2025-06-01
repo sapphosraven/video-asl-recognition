@@ -94,37 +94,45 @@ def predict_word_from_clip(model, clip_path, idx_to_class=idx_to_class, min_conf
         String containing the predicted word or "unknown" if confidence is too low
     """
     logger = logging.getLogger(__name__)
+    logger.info(f"[DEBUG] Starting prediction for clip: {clip_path}")
     
     try:
+        # Preprocess and inspect tensor
         x = preprocess_clip(clip_path, use_middle_frame=use_middle_frame)  # (1, C, H, W)
+        logger.info(f"[DEBUG] Preprocessed tensor shape: {tuple(x.shape)}")
         device = next(model.parameters()).device if hasattr(model, 'parameters') else torch.device('cpu')
         
         with torch.no_grad():
             # Forward pass
             logits = model(x.to(device))
+            logger.info(f"[DEBUG] Logits: {logits.cpu().numpy()}")
             
             # Get probabilities
             probs = torch.nn.functional.softmax(logits, dim=1)[0]
+            logger.info(f"[DEBUG] Probabilities sum: {probs.sum().item():.4f}, std: {probs.std().item():.6f}")
             
             # Check if model is making meaningful predictions
             prob_std = probs.std().item()
             if prob_std < 0.01:
-                logger.warning(f"Model not discriminating well for {clip_path} (std={prob_std:.5f})")
+                logger.warning(f"[DEBUG] Low discrimination (std={prob_std:.6f}), returning 'unknown'")
                 return "unknown"
             
             # Get prediction and confidence
             confidence, pred_idx = torch.max(probs, dim=0)
+            logger.info(f"[DEBUG] Max confidence: {confidence.item()*100:.2f}%, Pred idx: {pred_idx.item()}")
             pred = pred_idx.item()
             
             # Apply confidence threshold
             if confidence.item() < min_confidence:
-                logger.warning(f"Low confidence prediction ({confidence.item()*100:.2f}%) for {clip_path}")
+                logger.warning(f"[DEBUG] Confidence below threshold ({confidence.item():.2f}), returning 'unknown'")
                 return "unknown"
-                
+            
             # Map index to class name
             if idx_to_class is not None:
                 # idx_to_class may have int keys or str keys
-                return idx_to_class.get(str(pred), idx_to_class.get(pred, "unknown"))
+                mapped = idx_to_class.get(str(pred), idx_to_class.get(pred, None))
+                logger.info(f"[DEBUG] Mapped pred to word: {mapped}")
+                return mapped or "unknown"
             return str(pred)
             
     except Exception as e:
