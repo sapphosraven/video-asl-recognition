@@ -37,10 +37,9 @@ class TestDataset(Dataset):
             class_files = class_files[:max_samples_per_class]
             
             for file in class_files:
-                file_path = os.path.join(class_dir, file)
-                try:
+                file_path = os.path.join(class_dir, file)                try:
                     data = np.load(file_path)
-                    keypoints = data['keypoints']
+                    keypoints = data['nodes']  # Use 'nodes' instead of 'keypoints'
                     
                     if len(keypoints.shape) == 3:
                         frames, num_points, coords = keypoints.shape

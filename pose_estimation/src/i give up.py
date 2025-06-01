@@ -277,9 +277,8 @@ def count_parameters(model):
 
 def train_model_with_early_stopping(model, train_loader, val_loader, device, lr=0.001, max_epochs=100, patience=10, save_path=None):
     model.to(device)
-    optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=1e-4)
-    # Add learning rate scheduler for better convergence
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5, verbose=True)
+    optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=1e-4)    # Add learning rate scheduler for better convergence
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5)
     criterion = nn.CrossEntropyLoss()
     
     best_val_loss = float('inf')
