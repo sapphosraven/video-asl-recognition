@@ -1,0 +1,15 @@
+{
+  "data_dir": "f:\\Uni_Stuff\\6th_Sem\\DL\\Proj\\video-asl-recognition\\pose_estimation\\data\\keypoints",
+  "max_sequence_length": 50,
+  "max_samples_per_class": null,
+  "min_samples_per_class": 5,
+  "batch_size": 32,
+  "num_epochs": 100,
+  "learning_rate": 0.001,
+  "hidden_dim": 512,
+  "num_layers": 3,
+  "dropout": 0.3,
+  "val_split": 0.15,
+  "test_split": 0.15,
+  "save_dir": "lstm_300_class_training"
+}
