@@ -1,0 +1,74 @@
+ASL CNN MODEL TEST REPORT
+==================================================
+Generated: 2025-06-02 00:12:59
+Device: cuda
+
+Model: ASLWordCNN
+Parameters: 2,608,172
+Classes: 300
+
+PREDICTION RESULTS (8 videos tested)
+------------------------------
+Video: 00414.mp4
+  Expected: about
+  Predicted: unknown
+  Top 3 predictions:
+    1. mother: 0.003
+    2. who: 0.003
+    3. cousin: 0.003
+
+Video: 00623.mp4
+  Expected: accident
+  Predicted: unknown
+  Top 3 predictions:
+    1. mother: 0.003
+    2. who: 0.003
+    3. cousin: 0.003
+
+Video: 02999.mp4
+  Expected: again
+  Predicted: unknown
+  Top 3 predictions:
+    1. mother: 0.003
+    2. who: 0.003
+    3. cousin: 0.003
+
+Video: 04694.mp4
+  Expected: all
+  Predicted: unknown
+  Top 3 predictions:
+    1. mother: 0.003
+    2. who: 0.003
+    3. cousin: 0.003
+
+Video: 05229.mp4
+  Expected: always
+  Predicted: unknown
+  Top 3 predictions:
+    1. mother: 0.003
+    2. who: 0.003
+    3. cousin: 0.003
+
+Video: 00635_10_66.mp4
+  Expected: unknown
+  Predicted: unknown
+  Top 3 predictions:
+    1. mother: 0.003
+    2. who: 0.003
+    3. cousin: 0.003
+
+Video: 00635_80_97.mp4
+  Expected: unknown
+  Predicted: unknown
+  Top 3 predictions:
+    1. mother: 0.003
+    2. who: 0.003
+    3. cousin: 0.003
+
+Video: 01391.mp4
+  Expected: unknown
+  Predicted: unknown
+  Top 3 predictions:
+    1. mother: 0.003
+    2. who: 0.003
+    3. cousin: 0.003

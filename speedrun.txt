@@ -8,7 +8,74 @@ Overview:
 Current Status:
 - Flask frontend: basic setup in app.py with templates/index.html & result.html
 - CNN model: implemented and runnable via wordlevelrecognition/inference.py
-- TGCN model: preliminary code present; pretrained model available at OpenHands/checkpoints/model_tgcn_wlasl300.pth
+- TGCN model: preliminary code present; pretrained model available wit the OpenHands library like so:
+To load a pretrained TGCN from OpenHands, you’ll need to:
+
+Install OpenHands, if you haven't:
+
+bash
+Copy
+Edit
+pip install openhands
+Use their model hub loader. OpenHands provides load_model with pretrained weights.
+
+✅ Basic Example
+Here’s how to load the pretrained TGCN word-level model:
+
+python
+Copy
+Edit
+from openhands.models.builder import load_model
+
+# Load pretrained TGCN for word-level recognition
+model = load_model(
+    model_name="TGCN",                      # Model architecture
+    modality="pose",                        # Modality (pose, rgb, etc.)
+    dataset="phoenix14",                    # Target dataset used to train
+    checkpoint="word",                      # Type of checkpoint
+    pretrained=True,                        # Load pretrained weights
+)
+
+model.eval()
+🔁 What It Expects
+Input shape: [B, T, J, C]
+
+B = batch size
+
+T = number of frames
+
+J = joints (like 21)
+
+C = coordinates (usually 2 or 3)
+
+Make sure your preprocessing gives you pose keypoints in this format.
+
+📦 If You Want to Save and Load the Model Manually
+You can also save and load the model like this:
+
+python
+Copy
+Edit
+# Save
+torch.save(model.state_dict(), 'tgcn_pretrained.pth')
+
+# Later load manually
+model.load_state_dict(torch.load('tgcn_pretrained.pth'))
+model.eval()
+But use OpenHands’ loader directly unless you’re customizing.
+
+🧪 Test It
+After loading, pass a dummy tensor to check shape:
+
+python
+Copy
+Edit
+import torch
+x = torch.randn(1, 32, 21, 2)  # B, T, J, C — adjust based on your data
+with torch.no_grad():
+    out = model(x)
+print(out.shape)
+
 - NLP model: downloaded locally under sentence_reconstruction (train_t5.py, data present)
 - Ensemble logic: not implemented yet
 - Video segmentation: pipeline.py and SEGMENTATION_UPDATES.md exist
@@ -16,24 +83,35 @@ Current Status:
 Tasks To Do:
 1. Wire up video upload form to backend route in app.py
 2. Implement preprocessing & segmentation in pose_estimation/process_for_cnn.py
-3. Integrate CNN inference: call inference.py from wordlevelrecogntion
-4. Load TGCN pretrained from OpenHands, ensure input formatting matches expected keypoints
-5. Develop ensemble module to combine CNN & TGCN outputs into final word list
+3. Debug and fix CNN inference: analyze and fix inference.py from wordlevelrecogntion
+4. [SCRAPPED] Load TGCN pretrained from OpenHands
+5. [SCRAPPED] Develop ensemble module - just use CNN predictions directly
 6. Move NLP pretrained model into project directory and integrate sentence_reconstruction inference API
-7. Update pipeline.py to orchestrate full end-to-end flow
+7. Update pipeline.py to orchestrate CNN -> NLP flow
 8. Test end-to-end with sample videos in uploads/
 9. Update requirements.txt and README.md for dependencies and usage
 
 Progress Tracking:
 - [x] Task 1
-- [ ] Task 2
-- [ ] Task 3
-- [ ] Task 4
-- [ ] Task 5
+- [ ] Task 2 (will use existing preprocessing for now)
+- [ ] Task 3 - CURRENT: Debug CNN predictions - figure out why wrong predictions
+- [SCRAPPED] Task 4 - Focus on CNN instead of TGCN
+- [SCRAPPED] Task 5 - No ensemble needed, just CNN
 - [ ] Task 6
 - [ ] Task 7
 - [ ] Task 8
 - [ ] Task 9
+
+NEW STRATEGY CHANGE:
+- Scrap TGCN completely - too complex for 3-hour deadline
+- Focus 100% on fixing CNN predictions
+- CNN -> word predictions -> NLP sentence reconstruction
+- Debug why CNN gives wrong predictions:
+  * Check class mappings
+  * Verify preprocessing pipeline
+  * Test with known good samples
+  * Check model loading
+- Direct CNN-to-NLP pipeline for demo
 
 Notes:
 - Ensure Windows PowerShell compatibility for any scripts

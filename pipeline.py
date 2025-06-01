@@ -4,19 +4,167 @@ import torch
 import numpy as np
 from typing import List
 import logging
+from pathlib import Path
+import json
+
+# Existing imports
 from pose_inference import load_pose_model, predict_word_from_pose
-from wordlevelrecogntion.inference import load_cnn_model, predict_word_from_clip, predict_word_from_clip_ensemble
+from wordlevelrecogntion.inference import load_cnn_model, predict_word_from_clip
+
+# T-GCN OpenHands integration - Step 2 from nextsteps.txt
+try:
+    from openhands.models import get_model
+    TGCN_AVAILABLE = True
+except ImportError:
+    print("⚠️ OpenHands not available. T-GCN inference will be disabled.")
+    TGCN_AVAILABLE = False
 
 # Configure logger
 logger = logging.getLogger(__name__)
 
 # Load models
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-# Provide checkpoint path for the T-GCN pose model
-checkpoint_path = os.path.join(os.path.dirname(__file__), "OpenHands", "checkpoints", "model_tgcn_wlasl300.pth")
-pose_model = load_pose_model(checkpoint_path=checkpoint_path, device=device)
-# Load CNN model on same device
-cnn_model = load_cnn_model('wordlevelrecogntion/asl_recognition_final_20250518_132050.pth', device=device)
+
+# Load T-GCN model if available - Step 2 from nextsteps.txt
+def load_tgcn_model(device='cpu'):
+    """
+    Loads a pretrained T-GCN model using OpenHands for word-level recognition.
+
+    Returns:
+        model (torch.nn.Module): Pretrained T-GCN model in evaluation mode.
+    """
+    if not TGCN_AVAILABLE:
+        return None
+        
+    try:
+        # Load the class mapping to get number of classes
+        idx_to_class = load_idx_to_class_map('wordlevelrecogntion/class_map_wlasl300.json')
+        num_classes = len(idx_to_class)
+        
+        # Define the configuration dictionary for T-GCN
+        config = {
+            'model_name': 'tgcn',
+            'num_joints': 25,
+            'graph_args': {
+                'layout': 'openpose',
+                'strategy': 'spatial'
+            }
+        }
+        
+        # Set the number of input channels
+        in_channels = 3  # For x, y, z coordinates
+        
+        # Initialize the T-GCN model using OpenHands
+        model = get_model(config, in_channels, num_classes)
+        
+        # Load pretrained checkpoint if available
+        checkpoint_path = 'OpenHands/checkpoints/model_tgcn_wlasl300.pth'
+        if os.path.exists(checkpoint_path):
+            checkpoint = torch.load(checkpoint_path, map_location=device)
+            
+            # Handle different checkpoint formats
+            if isinstance(checkpoint, dict):
+                if 'model_state_dict' in checkpoint:
+                    state_dict = checkpoint['model_state_dict']
+                elif 'state_dict' in checkpoint:
+                    state_dict = checkpoint['state_dict']
+                else:
+                    state_dict = checkpoint
+            else:
+                state_dict = checkpoint
+            
+            # Load the state dict
+            try:
+                model.load_state_dict(state_dict, strict=True)
+                logger.info("Loaded pretrained T-GCN weights")
+            except RuntimeError as e:
+                logger.warning(f"Strict loading failed, trying with strict=False: {e}")
+                try:
+                    model.load_state_dict(state_dict, strict=False)
+                    logger.info("Loaded pretrained T-GCN weights (partial)")
+                except Exception as e2:
+                    logger.warning(f"Failed to load pretrained weights: {e2}. Using random initialization.")
+        else:
+            logger.warning(f"Checkpoint not found at {checkpoint_path}, using random initialization")
+        
+        model.to(device)
+        model.eval()
+        logger.info(f"T-GCN model loaded successfully with {num_classes} classes")
+        return model
+    except Exception as e:
+        logger.warning(f"Failed to load T-GCN model: {e}")
+        return None
+
+# Helper functions for T-GCN preprocessing - Step 3 and 4 from nextsteps.txt
+def convert_553_to_25(arr_553):
+    """
+    Converts [T, 553, 3] MediaPipe keypoints to [T, 25, 3] by selecting the first 25 pose joints.
+    """
+    # arr_553: numpy array of shape (T, 553, 3)
+    # Take only the first 25 entries along the joint dimension
+    arr_25 = arr_553[:, :25, :]  # shape -> (T, 25, 3)
+    return arr_25
+
+def pad_or_sample(arr_25, target_len=60):
+    """
+    Given a [T, 25, 3] array, uniformly sample or pad to length target_len.
+    """
+    T = arr_25.shape[0]
+    if T >= target_len:
+        idxs = np.linspace(0, T - 1, num=target_len, dtype=int)
+        arr = arr_25[idxs, :, :]
+    else:
+        pad = np.repeat(arr_25[-1][None, :, :], target_len - T, axis=0)
+        arr = np.concatenate([arr_25, pad], axis=0)
+    return arr  # shape -> (target_len, 25, 3)
+
+def load_idx_to_class_map(class_map_path):
+    """Load the index to class mapping from JSON file."""
+    try:
+        with open(class_map_path, 'r') as f:
+            return json.load(f)
+    except Exception as e:
+        logger.error(f"Failed to load class mapping: {e}")
+        return {}
+
+def predict_word_tgcn(keypoints_553_np, tgcn_model, device='cpu'):
+    """
+    Given [T, 553, 3] keypoints (numpy), run T-GCN to predict a word.
+    """
+    if tgcn_model is None:
+        return "unknown"
+        
+    try:
+        # 5.2 Convert to [T, 25, 3]
+        arr_25 = convert_553_to_25(keypoints_553_np)
+        # 5.3 Pad/sample to fixed T=60
+        arr_fixed = pad_or_sample(arr_25, target_len=60)
+        
+        # 5.4 Convert to the format expected by T-GCN: [batch_size, 3, num_frames, 25]
+        # From [T, 25, 3] to [1, 3, T, 25]
+        arr_transposed = arr_fixed.transpose(2, 0, 1)  # [3, T, 25]
+        x = torch.tensor(arr_transposed, dtype=torch.float32).unsqueeze(0).to(device)  # [1, 3, T, 25]
+        
+        # 5.5 Forward pass, get logits [1, num_classes]
+        with torch.no_grad():
+            logits = tgcn_model(x)  # shape: (1, num_classes)
+        pred_idx = logits.argmax(dim=1).item()
+        
+        # 5.6 Load idx_to_class mapping
+        idx_to_class = load_idx_to_class_map('wordlevelrecogntion/class_map_wlasl300.json')
+        if str(pred_idx) in idx_to_class:
+            word = idx_to_class[str(pred_idx)]
+        else:
+            word = "unknown"
+        return word
+    except Exception as e:
+        logger.error(f"T-GCN prediction failed: {e}")
+        return "unknown"
+
+# Load models once at startup
+pose_model = load_pose_model('OpenHands/checkpoints/model_tgcn_wlasl300.pth', device=device)
+cnn_model = load_cnn_model('wordlevelrecogntion/asl_recognition_final_20250518_132050.pth')
+tgcn_model = load_tgcn_model(device=device)
 
 # --- Step 1: Video segmentation ---
 # REPLACED: Basic motion detection → Enhanced WLASL-style segmentation
@@ -160,19 +308,37 @@ def split_into_clips(video_path: str) -> List[str]:
 
 def predict_word(clip_path: str) -> str:
     logger = logging.getLogger(__name__)
+    
+    # Step 5.8: Check for keypoints file (T-GCN primary method) - from nextsteps.txt
     clip_keypoints_path = clip_path.replace(".mp4", "_keypoints.npz")
     if os.path.exists(clip_keypoints_path):
         try:
-            arr = np.load(clip_keypoints_path)["arr_0"]
-            word = predict_word_from_pose(pose_model, arr, device=device)
-            return word
+            # Load keypoints array from .npz - should be (T, 553, 3) format
+            data = np.load(clip_keypoints_path)
+            
+            # Try to load 553-node keypoints first (from pose estimation multithreaded)
+            if 'nodes' in data:
+                arr_553 = data['nodes']  # shape: (T, 553, 3) 
+                if tgcn_model is not None:
+                    # Step 5.9: Predict word via T-GCN (primary method)
+                    word = predict_word_tgcn(arr_553, tgcn_model, device=device)
+                    logger.info(f"T-GCN prediction for {clip_path}: {word}")
+                    return word
+                else:
+                    logger.warning("T-GCN model not available, falling back to pose model")
+            
+            # Fallback to pose model if T-GCN not available or failed
+            if 'arr_0' in data:
+                arr = data["arr_0"]
+                word = predict_word_from_pose(pose_model, arr, device=device)
+                return word
+                
         except Exception as e:
-            logger.warning(f"Pose-based inference failed: {e}. Falling back to CNN.")
-    # Fallback to CNN-based prediction
+            logger.warning(f"Keypoint-based inference failed: {e}. Falling back to CNN.")
+    
+    # Final fallback to CNN-based prediction
     try:
-        logger.info(f"Running CNN ensemble inference on {clip_path}")
-        # Use ensemble CNN inference to get top logits over all frames
-        word = predict_word_from_clip_ensemble(cnn_model, clip_path, min_confidence=0.0)
+        word = predict_word_from_clip(cnn_model, clip_path, min_confidence=0.25)
         return word
     except Exception as e:
         logger.error(f"Error in CNN prediction: {e}")
@@ -181,10 +347,28 @@ def predict_word(clip_path: str) -> str:
 # --- Step 3: Sentence reconstruction ---
 def flesh_out_sentence(sign_clips: List[str], pause_duration: int = 500):
     """
-    Stubbed sentence reconstruction: skip moviepy to avoid extra dependencies.
-    Returns None since we will reconstruct sentences via NLP later.
+    Given a list of sign clips, reconstruct the sentence by inserting pauses
+    where necessary based on the analysis of the sign clips.
     """
-    return None
+    import moviepy.editor as mpy
+    
+    # Load the sign clips
+    clips = [mpy.VideoFileClip(c) for c in sign_clips]
+    
+    # Calculate durations and decide pauses
+    final_clips = []
+    for i, clip in enumerate(clips):
+        final_clips.append(clip)
+        
+        # Add a pause between signs if not the last sign
+        if i < len(clips) - 1:
+            pause = mpy.ColorClip(size=clip.size, color=(255,255,255), duration=pause_duration/1000)
+            final_clips.append(pause)
+    
+    # Concatenate all clips
+    final_video = mpy.concatenate_videoclips(final_clips, method="compose")
+    
+    return final_video
 
 def process_asl_video(video_path: str):
     """
@@ -193,18 +377,26 @@ def process_asl_video(video_path: str):
     2. For each clip, it predicts the corresponding word in ASL.
     3. Reconstructs the sentence by combining the sign clips with appropriate pauses.
     """
-    import time
-    start_time = time.time()
     # Step 1: Video segmentation
     clip_paths = split_into_clips(video_path)
+    
+    if not clip_paths:
+        logger.warning("No clips found for the given video.")
+        return None
+    
     # Step 2: Word prediction for each clip
-    words = [predict_word(c) for c in clip_paths]
-    # Reconstruct sentence
+    words = []
+    for clip in clip_paths:
+        word = predict_word(clip)
+        words.append(word)
+        logger.info(f"Predicted word for {clip}: {word}")
+    
+    # Step 3: Sentence reconstruction
+    # For now, we just concatenate the words with a space
     sentence = " ".join(words)
-    total_time = time.time() - start_time
-    return {
-        'timing': {'total': total_time},
-        'clips': clip_paths,
-        'words': words,
-        'sentence': sentence
-    }
+    logger.info(f"Reconstructed sentence: {sentence}")
+    
+    # TODO: Improve sentence reconstruction with proper timing and pauses
+    final_video = flesh_out_sentence(clip_paths)
+    
+    return final_video
