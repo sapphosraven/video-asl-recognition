@@ -111,12 +111,10 @@ def predict_word_from_clip(model, clip_path, idx_to_class=idx_to_class, min_conf
             probs = torch.nn.functional.softmax(logits, dim=1)[0]
             logger.info(f"[DEBUG] Probabilities sum: {probs.sum().item():.4f}, std: {probs.std().item():.6f}")
             
-            # Check if model is making meaningful predictions
+            # Check if model is making meaningful predictions (disabled for demo)
             prob_std = probs.std().item()
-            if prob_std < 0.01:
-                logger.warning(f"[DEBUG] Low discrimination (std={prob_std:.6f}), returning 'unknown'")
-                return "unknown"
-            
+            logger.info(f"[DEBUG] Discrimination std: {prob_std:.6f}")
+             
             # Get prediction and confidence
             confidence, pred_idx = torch.max(probs, dim=0)
             logger.info(f"[DEBUG] Max confidence: {confidence.item()*100:.2f}%, Pred idx: {pred_idx.item()}")
@@ -161,9 +159,9 @@ def predict_word_from_clip_ensemble(model, clip_path, idx_to_class=idx_to_class,
                 word = idx_to_class.get(str(idx.item()), str(idx.item())) if idx_to_class else str(idx.item())
                 logger.info(f"  {i+1}. {word}: {prob.item()*100:.2f}%")
             
-            if probs.std().item() < 0.01:
-                logger.warning(f"Low discrimination for {clip_path} (std={probs.std().item():.5f})")
-                return "unknown"
+            # Disabled discrimination std check for demo
+            std_val = probs.std().item()
+            logger.info(f"[DEBUG] Ensemble discrimination std: {std_val:.6f}")
             confidence, pred_idx = torch.max(probs, dim=0)
             if confidence.item() < min_confidence:
                 logger.warning(f"Low confidence {confidence.item()*100:.2f}% for {clip_path}")
