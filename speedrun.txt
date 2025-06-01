@@ -1,0 +1,40 @@
+Project: ASL Recognition Flask Demo (Due in 3 hours)
+
+Overview:
+- User uploads video of person signing
+- Backend pipeline: preprocess -> segment -> CNN & TGCN ensemble -> word array
+- NLP model: reconstruct full sentence from word array
+
+Current Status:
+- Flask frontend: basic setup in app.py with templates/index.html & result.html
+- CNN model: implemented and runnable via wordlevelrecognition/inference.py
+- TGCN model: preliminary code present; pretrained model available at OpenHands/checkpoints/model_tgcn_wlasl300.pth
+- NLP model: downloaded locally under sentence_reconstruction (train_t5.py, data present)
+- Ensemble logic: not implemented yet
+- Video segmentation: pipeline.py and SEGMENTATION_UPDATES.md exist
+
+Tasks To Do:
+1. Wire up video upload form to backend route in app.py
+2. Implement preprocessing & segmentation in pose_estimation/process_for_cnn.py
+3. Integrate CNN inference: call inference.py from wordlevelrecogntion
+4. Load TGCN pretrained from OpenHands, ensure input formatting matches expected keypoints
+5. Develop ensemble module to combine CNN & TGCN outputs into final word list
+6. Move NLP pretrained model into project directory and integrate sentence_reconstruction inference API
+7. Update pipeline.py to orchestrate full end-to-end flow
+8. Test end-to-end with sample videos in uploads/
+9. Update requirements.txt and README.md for dependencies and usage
+
+Progress Tracking:
+- [ ] Task 1
+- [ ] Task 2
+- [ ] Task 3
+- [ ] Task 4
+- [ ] Task 5
+- [ ] Task 6
+- [ ] Task 7
+- [ ] Task 8
+- [ ] Task 9
+
+Notes:
+- Ensure Windows PowerShell compatibility for any scripts
+- Prioritize minimal working demo over full optimization
